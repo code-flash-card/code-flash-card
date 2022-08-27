@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { atom, useAtom } from 'jotai';
 
-import { FrontOfCard, BackOfCard } from '../components/DetailCard'
+import DetailCard from '../components/DetailCard'
 import FlashCardsNav from '../components/FlashCardsNav'
 import PrevNextBtn from '../components/PrevNextBtn'
 
@@ -26,7 +26,8 @@ export default function CardDetailPage() {
   return (
     <>
       <FlashCardsNav/>
-      {isForward ? <FrontOfCard content={mockCard.explain} /> : <BackOfCard content={mockCard.answer} />}
+      {isForward ? <DetailCard title="Question" content={mockCard.explain} onClick={toggleCard} /> 
+      : <DetailCard title="Answer" content={mockCard.answer} onClick={toggleCard} />}
       <PrevNextBtn />
     </>
   )
