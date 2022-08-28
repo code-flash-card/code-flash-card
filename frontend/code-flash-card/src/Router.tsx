@@ -3,14 +3,14 @@ import MainPage from "./main/index";
 import MakeCard from "./main/MakeCard";
 
 function Router() {
-    return (
+  return (
     <BrowserRouter>
-         <Routes>  
-            <Route path="/" element={<MainPage />} />
-            <Route path="/makecard" element={<MakeCard />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/makecard" element={<MakeCard />} />
+      </Routes>
     </BrowserRouter>
-    );
+  );
 }
 
 export default Router;
