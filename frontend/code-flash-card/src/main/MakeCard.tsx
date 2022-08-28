@@ -3,7 +3,6 @@ import { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BackSpaceBtn from "../components/BackSpaceBtn";
 import { AskingStopMakingCardModal } from "../components/AskingStopMakingCardModal";
-
 import "../reset.css";
 
 /**
@@ -231,11 +230,22 @@ const MakeCardHeader = styled.div`
   height: 24px;
   padding: 12px 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img {
+    margin-left: 16px;
+  }
 
   p {
     color: #fcfcfc;
     font-size: 20px;
     font-weight: 600;
+  }
+
+  span {
+    width: 24px;
   }
 `;
 
