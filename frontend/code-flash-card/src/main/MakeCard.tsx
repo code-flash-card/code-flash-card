@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BackSpaceBtn from "../components/BackSpaceBtn";
-import { AskingStopMaikingCardModal } from "../components/AskingStopMaikingCardModal";
+import { AskingStopMakingCardModal } from "../components/AskingStopMakingCardModal";
 
 import "../reset.css";
 
@@ -122,7 +122,6 @@ const MakeCard = () => {
 
   const [isShowModal, setIsShowModal] = useState(false);
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("click");
     e.preventDefault();
 
     // if (cardInfo.summitState === 'enableSubmit') {
@@ -214,7 +213,7 @@ const MakeCard = () => {
           </Styled.SubmitButton>
         </Styled.MakeCardForm>
       </Styled.MakeCardContainer>
-      {isShowModal && <AskingStopMaikingCardModal />}
+      {isShowModal && <AskingStopMakingCardModal hideModal={hideModal} />}
     </>
   );
 };
