@@ -141,20 +141,20 @@ const MakeCard = () => {
   return (
     <>
       <Styled.MakeCardContainer>
-        <div
-          onClick={() => {
-            if (isShowModalEnabled(cardInfo)) {
-              // 모달 상태를 true 바꾸는 로직
-              setIsShowModal(true);
-            } else {
-              navigation("/");
-            }
-          }}
-          style={{ position: "absolute", left: 5, color: "wheat" }}
-        >
-          <BackSpaceBtn />
-        </div>
         <Styled.MakeCardHeader>
+          <div
+            onClick={() => {
+              if (isShowModalEnabled(cardInfo)) {
+                // 모달 상태를 true 바꾸는 로직
+                setIsShowModal(true);
+              } else {
+                navigation("/");
+              }
+            }}
+            style={{ position: "absolute", left: 5, color: "wheat" }}
+          >
+            <BackSpaceBtn />
+          </div>
           <p>카드 만들기</p>
         </Styled.MakeCardHeader>
         <Styled.MakeCardForm onSubmit={onSubmit}>
@@ -242,6 +242,8 @@ const MakeCardHeader = styled.div`
     color: #fcfcfc;
     font-size: 20px;
     font-weight: 600;
+    text-align: center;
+    margin: 0 auto;
   }
 
   span {

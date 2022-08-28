@@ -4,6 +4,7 @@ const images = {
     icon_github: "/assets/images/icon_github.svg",
     icon_view: "/assets/images/icon_view.svg",
     icon_create: "/assets/images/icon_create.svg",
+    icon_close: "/assets/images/icon_close.svg",
     banner: "/assets/images/banner.svg",
 };
 
