@@ -48,9 +48,9 @@ const hashList: Hash[] = [
 ]
 
 // 컬러가 될 수 있는 모든 색깔의 상수 나중에 섭이 정해주실예정.
-const COLORS_FOR_HASH = ['#3680FF', '#49C14E', '#F9A825', '#EA1B1A', '#FDD629']
-const COLORS_FOR_HOTTEST = ['#3680FF', '#49C14E', '#F9A825', '#EA1B1A', '#FDD629']
-const COLORS_FOR_CARD = ['#8cfc9f', '#58faa9', '#95fa43', '#faa92f', '#236DEF', '#185ACE']
+const COLORS_FOR_HASH = ['#36E1C2', '#F9FC60', '#61EB98', '#D88B54', '#809DAD']
+const COLORS_FOR_HOTTEST = ['#D861EB', '#35E1C2', '#E56060', '#F9FC5F', '#635FFC']
+const COLORS_FOR_CARD = ['#00bbf9', '#fee440', '#9b5de5', '#06d6a0', '#eb5e28', '#8da9c4', '#62b6cb']
 
 
 const calHashPropsList = (hashList: Hash[]) => {
@@ -65,7 +65,8 @@ const MainPageUI = ({ popularList, hashList }: { popularList: SimpleCard[], hash
   return (
     <Styled.IndexSection>
       <Styled.MainHeader>
-        dd
+        <img src="../images/logo_flip.svg" />
+        <img src="../images/icon_github.svg" />
       </Styled.MainHeader>
       <Styled.ContentContainer>
         <Styled.BannerContainer>Banner</Styled.BannerContainer>
@@ -175,7 +176,7 @@ const HashtagItemList = styled.div`
 const HashtagItem = styled.li<{ $backgroundColor: string }>`
   color: #121212;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   margin-right: 8px;
   padding: 8px 12px;
   background-color: ${p => p.$backgroundColor};  
@@ -196,15 +197,15 @@ const CardItem = styled.li<{ $backgroundColor: string }>`
   border-radius: 12px;
 
   p {
-  font - size: 20px;
-  font - weight: 700;
+  font-size: 20px;
+  font-weight: 700;
 
 }
 
   span {
   color: #525252;
-  font - size: 12px;
-  font - weight: 400;
+  font-size: 12px;
+  font-weight: 400;
 }
 `
 const Styled = { CardItem, HashtagItem, HashtagItemList, CreateCardButton, SectionLabel, BannerContainer, IndexSection, MainHeader, ContentContainer }
