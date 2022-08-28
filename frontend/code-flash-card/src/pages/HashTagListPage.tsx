@@ -1,43 +1,40 @@
-import React from 'react'
+import React from "react";
 
-import FlashCards, { Card } from '../components/FlashCards'
-import FlashCardsNav from '../components/FlashCardsNav';
-import FlashCardsTitle from '../components/FlashCardsTitle'
+import { useFetch } from "../hooks";
+
+import FlashCards, { Card } from "../components/FlashCards";
+import FlashCardsNav from "../components/FlashCardsNav";
+import FlashCardsTitle from "../components/FlashCardsTitle";
+
+const url = `https://weareboard.kr/teosp/v1/card`;
 
 export default function HashTagListPage() {
-  const mockKeyword = '# 자바스크립트';
-  const mockCards: Card[] = [{
-    cardId : 1,
-    explain: "state",
-    viewCount: 100,
-  },{
-    cardId : 2,
-    explain: "useState",
-    viewCount: 200,
-  },{
-    cardId : 3,
-    explain: "useEffect",
-    viewCount: 300,
-  },{
-    cardId : 4,
-    explain: "reactQuery",
-    viewCount: 400,
-  },{
-    cardId : 5,
-    explain: "ESLint",
-    viewCount: 500,
-  },{
-    cardId : 6,
-    explain: "sprint",
-    viewCount: 600,
-  },
-];
+    const { data, error } = useFetch<Card[]>(url);
+    
+    const cards =
+        data?.map((card) => {
+            return {
+                cardId: card.cardId,
+                explain: card.explain,
+                viewCount: card.viewCount,
+            };
+        }) || [];
+    console.log(error);
 
-  return (
-    <>
-      <FlashCardsNav />
-      <FlashCardsTitle title={mockKeyword} />
-      <FlashCards cards={mockCards}/>
-    </>
-  )
+    const mockKeyword = "# 자바스크립트";
+
+    return (
+        <>
+            <FlashCardsNav />
+            <FlashCardsTitle title={mockKeyword} />
+            <FlashCards cards={cards} />
+        </>
+    );
 }
+
+// TODO : 백그라운드 컬러 : #272727  카드 컬러 : #36E1C2
+
+// TODO: flex 2 줘서 2개씩 한묶음 형식으로. or 그리드..
+
+// TODO: 아아아아 모바일형으로만 생각을 하자 이번엔 pc나 태블릿은 지금은 생각안해도 될 것 같다....
+//       결국은 모바일 화면만 고려
