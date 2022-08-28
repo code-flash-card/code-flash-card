@@ -10,7 +10,7 @@ const url = `https://weareboard.kr/teosp/v1/card`;
 
 export default function HashTagListPage() {
     const { data, error } = useFetch<Card[]>(url);
-    // console.log(data);
+    
     const cards =
         data?.map((card) => {
             return {
