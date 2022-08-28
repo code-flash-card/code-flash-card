@@ -68,7 +68,11 @@ const MainPageUI = ({ simpleCardList, hashList }: { simpleCardList: SimpleCard[]
         <a href="https://github.com/code-flash-card/code-flash-card"><img src="../images/icon_github.svg" /></a>
       </Styled.MainHeader>
       <Styled.ContentContainer>
-        <Styled.BannerContainer>Banner</Styled.BannerContainer>
+        <Link to="/">
+          <Styled.BannerContainer>
+            <img src="../images/banner.svg" />
+          </Styled.BannerContainer>
+        </Link>
         <ul>
           <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
           <Styled.HashtagItemList>
@@ -200,9 +204,15 @@ const ContentContainer = styled.div`
 const BannerContainer = styled.div`
   width: 100%;
   height: 160px; 
-  background-color: #D9D9D9; 
+  background-color: #121212; 
   border: 0;
   border-radius: 12px;
+  overflow: hidden;
+
+  img {
+    margin-left: 24px;
+    margin-top: -16px;
+  }
 `
 
 const SectionLabel = styled.li`
