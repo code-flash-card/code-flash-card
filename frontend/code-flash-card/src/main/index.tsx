@@ -65,8 +65,10 @@ const MainPageUI = ({ popularList, hashList }: { popularList: SimpleCard[], hash
   return (
     <Styled.IndexSection>
       <Styled.MainHeader>
-        <img src="../images/logo_flip.svg" />
-        <img src="../images/icon_github.svg" />
+        <Link to="/" >
+          <img src="../images/logo_flip.svg" />
+        </Link>
+        <a href="https://github.com/code-flash-card/code-flash-card"><img src="../images/icon_github.svg" /></a>
       </Styled.MainHeader>
       <Styled.ContentContainer>
         <Styled.BannerContainer>Banner</Styled.BannerContainer>
@@ -98,7 +100,7 @@ const MainPageUI = ({ popularList, hashList }: { popularList: SimpleCard[], hash
         </ul>
         <Styled.CreateCardButton type="button">
           <Link to="/makecard" >
-            icon
+            <img src="../images/icon_create.svg" />
           </Link>
         </Styled.CreateCardButton>
       </Styled.ContentContainer>
@@ -129,10 +131,15 @@ const IndexSection = styled.div`
   }
 `
 
-const MainHeader = styled.div``;
+const MainHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  margin-bottom: 16px;
+`;
 
 const ContentContainer = styled.div`
-margin: 0 16px;
+  margin: 0 16px;
 `
 const BannerContainer = styled.div`
   width: 100%;

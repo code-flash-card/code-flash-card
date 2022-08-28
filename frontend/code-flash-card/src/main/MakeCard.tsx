@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useReducer, useState } from 'react';
+import { Link } from "react-router-dom";
 import "../reset.css";
 
 
@@ -126,7 +127,12 @@ const MakeCard = () => {
   return (
     <Styled.MakeCardContainer>
       <Styled.MakeCardHeader>
+        <Link to="/" >
+          <img src="../images/icon_close.svg" />
+        </Link>
+
         <p>카드 만들기</p>
+        <span></span>
       </Styled.MakeCardHeader>
       <Styled.MakeCardForm onSubmit={onSubmit}>
         <Styled.InputContainer>
@@ -160,7 +166,6 @@ const MakeCard = () => {
           }} placeholder='만드실 카드의 뒷면(답)을 채워주세요.' />
         </Styled.InputContainer>
         <Styled.SubmitButton type='submit' disabled={cardInfo.summitState === 'disableSubmit'}>카드 만들기</Styled.SubmitButton>
-
       </Styled.MakeCardForm>
     </Styled.MakeCardContainer>
   )
@@ -180,11 +185,22 @@ const MakeCardHeader = styled.div`
   height: 24px;
   padding: 12px 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img {
+    margin-left: 16px;
+  }
 
   p {
     color: #fcfcfc;
     font-size: 20px;
     font-weight: 600;
+  }
+
+  span {
+    width: 24px;
   }
 `;
 
