@@ -163,15 +163,18 @@ const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
 }
 
 const MainPage = () => {
-  const { data: cardListFromServer, error: error3 } = useFetch<CardFromServer[]>('https://weareboard.kr/teosp/v1/card')
+  const { data: cardListFromServer, error } = useFetch<CardFromServer[]>('https://weareboard.kr/teosp/v1/card')
 
   if (cardListFromServer) {
     const simpleCardList = formatSimpleCardList(cardListFromServer)
     const simpleHashList = formatSimpleHashList(cardListFromServer)
 
     return <MainPageUI simpleCardList={simpleCardList} hashList={simpleHashList} ></MainPageUI>;
+  } else if (error) {
+    return <div>!!!!error</div>
   }
-  return <div>!!!!error</div>
+  return <div>Loading...</div>
+
 
 };
 
