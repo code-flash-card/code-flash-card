@@ -1,8 +1,8 @@
 // import { Link } from "react-router-dom";
+import images from "../assets/images";
 
 export default function BackSpaceBtn() {
     return (
-        <div>{"<-"}</div>
-        // TODO: <img/>  화살표 이미지
+        <img src={images.icon_close} />
     );
 }
