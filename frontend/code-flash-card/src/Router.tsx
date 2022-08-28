@@ -7,11 +7,10 @@ import CardDetailPage from "./pages/CardDetailPage";
 import HashTagListPage from "./pages/HashTagListPage";
 
 function Router() {
-<<<<<<< Updated upstream
   return (
     <BrowserRouter basename="flashcard">
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="" element={<MainPage />} />
         <Route path="/makecard" element={<MakeCard />} />
         <Route path="/makecard/:cardId/done" element={<MakeCardDonePage />} />
         <Route path="/detail/:cardId" element={<CardDetailPage />} />
@@ -19,22 +18,6 @@ function Router() {
       </Routes>
     </BrowserRouter>
   );
-=======
-    return (
-        <BrowserRouter basename="flashcard">
-            <Routes>
-                <Route path="" element={<MainPage />} />
-                <Route path="/makecard" element={<MakeCard />} />
-                <Route
-                    path="/makecard/:cardId/done"
-                    element={<MakeCardDonePage />}
-                />
-                <Route path="/detail/:cardId" element={<CardDetailPage />} />
-                <Route path="/hashtags" element={<HashTagListPage />} />
-            </Routes>
-        </BrowserRouter>
-    );
->>>>>>> Stashed changes
 }
 
 export default Router;

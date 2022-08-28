@@ -81,78 +81,6 @@ const MainPageUI = ({
         .sort((a, b) => b.view - a.view)
         .slice(0, 2);
 
-<<<<<<< Updated upstream
-const MainPageUI = ({ simpleCardList, hashList }: { simpleCardList: SimpleCard[], hashList: Hash[] }) => {
-  // 가장 높은 view를 가진 최상위 리스트중 2개만 보여주기
-  const popularList: SimpleCard[] = simpleCardList.sort((a, b) => b.view - a.view).slice(0, 2)
-
-  return (
-    <Styled.IndexSection>
-      <Styled.MainHeader>
-        <Link to="/" >
-          <img src="../images/logo_flip.svg" />
-        </Link>
-        <a href="https://github.com/code-flash-card/code-flash-card"><img src="../images/icon_github.svg" /></a>
-      </Styled.MainHeader>
-      <Styled.ContentContainer>
-        <Link to="/">
-          <Styled.BannerContainer>
-            <img src="../images/banner.svg" />
-          </Styled.BannerContainer>
-        </Link>
-        <ul>
-          <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
-          <Styled.HashtagItemList>
-            {calHashPropsList(hashList).map((hash) => (
-              <Styled.HashtagItem $backgroundColor={hash.color} key={hash.id}>#{hash.name}</Styled.HashtagItem>
-            ))}
-          </Styled.HashtagItemList>
-        </ul>
-        <ul>
-          <Styled.SectionLabel>🔥 지금 HOT한 카드</Styled.SectionLabel>
-          {popularList.map(p => ({ ...p, color: textToColor(COLORS_FOR_HOTTEST, p.title) })).map((popularCard) => (
-            <Styled.CardItem $backgroundColor={popularCard.color} key={popularCard.id}>
-              <p>{popularCard.title}</p>
-              <InfoContainer>
-                <li>
-                  <span>#hashtag</span>
-                </li>
-                <li>
-                  <img src="../images/icon_view.svg" />
-                  <span>{popularCard.view}</span>
-                </li>
-              </InfoContainer>
-            </Styled.CardItem>
-          ))}
-        </ul>
-        <ul>
-          <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
-          {simpleCardList.map(s => ({ ...s, color: textToColor(COLORS_FOR_CARD, s.title) })).map((simpleCard) => (
-            <Styled.CardItem $backgroundColor={simpleCard.color} key={simpleCard.id} >
-              <p>{simpleCard.title}</p>
-              <InfoContainer>
-                <li>
-                  <span>#hashtag</span>
-                </li>
-                <li>
-                  <img src="../images/icon_view.svg" />
-                  <span>{simpleCard.view}</span>
-                </li>
-              </InfoContainer>
-            </Styled.CardItem>
-          ))}
-        </ul>
-        <Styled.CreateCardButton type="button">
-          <Link to="/makecard" >
-            <img src="../images/icon_create.svg" />
-          </Link>
-        </Styled.CreateCardButton>
-      </Styled.ContentContainer>
-    </Styled.IndexSection >
-  );
-}
-
-=======
     return (
         <Styled.IndexSection>
             <Styled.MainHeader>
@@ -164,7 +92,11 @@ const MainPageUI = ({ simpleCardList, hashList }: { simpleCardList: SimpleCard[]
                 </a>
             </Styled.MainHeader>
             <Styled.ContentContainer>
-                <Styled.BannerContainer>Banner</Styled.BannerContainer>
+                <Link to="/">
+                    <Styled.BannerContainer>
+                        <img src="../images/banner.svg" />
+                    </Styled.BannerContainer>
+                </Link>
                 <ul>
                     <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
                     <Styled.HashtagItemList>
@@ -239,7 +171,6 @@ const MainPageUI = ({ simpleCardList, hashList }: { simpleCardList: SimpleCard[]
         </Styled.IndexSection>
     );
 };
->>>>>>> Stashed changes
 
 interface HashTagFromServer {
     cardHashtagId: number;
@@ -291,28 +222,13 @@ const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
 };
 
 const MainPage = () => {
-<<<<<<< Updated upstream
-  const { data: cardListFromServer, error } = useFetch<CardFromServer[]>('https://weareboard.kr/teosp/v1/card')
-
-  if (cardListFromServer) {
-    const simpleCardList = formatSimpleCardList(cardListFromServer)
-    const simpleHashList = formatSimpleHashList(cardListFromServer)
-
-    return <MainPageUI simpleCardList={simpleCardList} hashList={simpleHashList} ></MainPageUI>;
-  } else if (error) {
-    return <div>!!!!error</div>
-  }
-  return <div>Loading...</div>
-
-=======
-    const { data: cardListFromServer, error: error3 } = useFetch<
-        CardFromServer[]
-    >("https://weareboard.kr/teosp/v1/card");
+    const { data: cardListFromServer, error } = useFetch<CardFromServer[]>(
+        "https://weareboard.kr/teosp/v1/card"
+    );
 
     if (cardListFromServer) {
         const simpleCardList = formatSimpleCardList(cardListFromServer);
         const simpleHashList = formatSimpleHashList(cardListFromServer);
->>>>>>> Stashed changes
 
         return (
             <MainPageUI
@@ -320,8 +236,10 @@ const MainPage = () => {
                 hashList={simpleHashList}
             ></MainPageUI>
         );
+    } else if (error) {
+        return <div>!!!!error</div>;
     }
-    return <div>!!!!error</div>;
+    return <div>Loading...</div>;
 };
 
 const IndexSection = styled.div`
@@ -347,27 +265,18 @@ const ContentContainer = styled.div`
     margin: 0 16px;
 `;
 const BannerContainer = styled.div`
-<<<<<<< Updated upstream
-  width: 100%;
-  height: 160px; 
-  background-color: #121212; 
-  border: 0;
-  border-radius: 12px;
-  overflow: hidden;
-
-  img {
-    margin-left: 24px;
-    margin-top: -16px;
-  }
-`
-=======
     width: 100%;
     height: 160px;
-    background-color: #d9d9d9;
+    background-color: #121212;
     border: 0;
     border-radius: 12px;
+    overflow: hidden;
+
+    img {
+        margin-left: 24px;
+        margin-top: -16px;
+    }
 `;
->>>>>>> Stashed changes
 
 const SectionLabel = styled.li`
     color: #fff;
