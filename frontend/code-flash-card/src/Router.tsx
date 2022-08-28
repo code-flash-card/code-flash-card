@@ -6,16 +6,16 @@ import CardDetailPage from "./pages/CardDetailPage";
 import HashTagListPage from "./pages/HashTagListPage";
 
 function Router() {
-    return (
+  return (
     <BrowserRouter>
-        <Routes>  
-            <Route path="/" element={<MainPage />} />
-            <Route path="/makecard" element={<MakeCard />} />
-            <Route path="/detail/:cardId" element={<CardDetailPage />} />
-            <Route path="/hashtags" element={<HashTagListPage />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/makecard" element={<MakeCard />} />
+        <Route path="/detail/:cardId" element={<CardDetailPage />} />
+        <Route path="/hashtags" element={<HashTagListPage />} />
+      </Routes>
     </BrowserRouter>
-    );
+  );
 }
 
 export default Router;

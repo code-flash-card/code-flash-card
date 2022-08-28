@@ -13,7 +13,7 @@ type Action<T> =
   | { type: 'fetched', payload: T }
   | { type: 'error', payload: Error }
 
-export function useFetch<T = unknown> (url?: string, options?: RequestInit): State<T> {
+export function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
   const cache = useRef<Cache<T>>({});
 
   // Used to prevent state update if the component is unmounted
@@ -27,14 +27,14 @@ export function useFetch<T = unknown> (url?: string, options?: RequestInit): Sta
   // Keep state logic separated
   const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
     switch (action.type) {
-    case 'loading':
-      return { ...initialState };
+      case 'loading':
+        return { ...initialState };
       case 'fetched':
-      return { ...initialState, data: action.payload };
+        return { ...initialState, data: action.payload };
       case 'error':
-      return { ...initialState, error: action.payload };
+        return { ...initialState, error: action.payload };
       default:
-      return state;
+        return state;
     }
   };
 

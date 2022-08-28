@@ -1,129 +1,119 @@
 import { useFetch } from "../hooks";
+import { Link } from "react-router-dom";
 import styled from '@emotion/styled';
 import "../reset.css";
 import { textToColor } from "../utils";
 
 interface Banner {
-    id: string;
-    content: string;
+  id: string;
+  content: string;
 }
 
 type SimpleCard = {
-    id: string; 
-    title: string; 
-    hashId: string;    
-    view: number; 
+  id: string;
+  title: string;
+  hashId: string;
+  view: number;
 }
 
 
 interface Hash {
-    id: string;
-    name: string;
-    cards: SimpleCard[]
+  id: string;
+  name: string;
+  cards: SimpleCard[]
 }
 
 interface MainState {
-    banner: Banner;
-    hashList: Hash[];
-    popularList: SimpleCard[];
+  banner: Banner;
+  hashList: Hash[];
+  popularList: SimpleCard[];
 }
 
-const simpleCards:SimpleCard[] = [
-    {id:'1',title:'oop관련 문제',hashId:'#1',view:2},
-    {id:'2',title:'typescript 관련 문제',hashId:'#2',view:4},
-    {id:'3',title:'oop관련 프론트앤드 문제',hashId:'#1',view:50},
-    {id:'4',title:'자바문제',hashId:'#3',view:4},
-    {
-        id:'5',
-        title: 'HTML/CSS',
-        hashId: '#4',
-        view: 1
-        },
+const simpleCards: SimpleCard[] = [
+  { id: '1', title: 'oop관련 문제', hashId: '#1', view: 2 },
+  { id: '2', title: 'typescript 관련 문제', hashId: '#2', view: 4 },
+  { id: '3', title: 'oop관련 프론트앤드 문제', hashId: '#1', view: 50 },
+  { id: '4', title: '자바문제', hashId: '#3', view: 4 },
+  { id: '5', title: 'HTML/CSS', hashId: '#4', view: 1 },
 ]
-const hashList:Hash[] = [
-    {id:'#1', name:'oop', cards:simpleCards.filter(card=>card.hashId==='#1')},
-    {id:'#2', name:'typescript', cards:simpleCards.filter(card=>card.hashId==='#2')},
-    {id:'#3', name:'java', cards:simpleCards.filter(card=>card.hashId==='#3')},
-    {
+const hashList: Hash[] = [
+  { id: '#1', name: 'oop', cards: simpleCards.filter(card => card.hashId === '#1') },
+  { id: '#2', name: 'typescript', cards: simpleCards.filter(card => card.hashId === '#2') },
+  { id: '#3', name: 'java', cards: simpleCards.filter(card => card.hashId === '#3') },
+  {
     id: '#4',
     name: 'HTML/CSS',
     cards: simpleCards.filter(v => v.hashId === '#4')
-    },
+  },
 ]
 
 // 컬러가 될 수 있는 모든 색깔의 상수 나중에 섭이 정해주실예정.
-const COLORS_FOR_HASH = ['#3680FF','#49C14E','#F9A825','#EA1B1A','#FDD629']
-const COLORS_FOR_HOTTEST= ['#3680FF','#49C14E','#F9A825','#EA1B1A','#FDD629']
-const COLORS_FOR_CARD = ['#8cfc9f','#58faa9','#95fa43','#faa92f','#236DEF','#185ACE']
+const COLORS_FOR_HASH = ['#36E1C2', '#F9FC60', '#61EB98', '#D88B54', '#809DAD']
+const COLORS_FOR_HOTTEST = ['#D861EB', '#35E1C2', '#E56060', '#F9FC5F', '#635FFC']
+const COLORS_FOR_CARD = ['#00bbf9', '#fee440', '#9b5de5', '#06d6a0', '#eb5e28', '#8da9c4', '#62b6cb']
 
 
-const calHashPropsList = (hashList:Hash[])=>{
-    return hashList.map(hash=>({...hash,color:textToColor(COLORS_FOR_HASH,hash.name)}))
+const calHashPropsList = (hashList: Hash[]) => {
+  return hashList.map(hash => ({ ...hash, color: textToColor(COLORS_FOR_HASH, hash.name) }))
 }
 
 // 가장 높은 view를 가진 최상위 리스트중 2개만 보여주기
-const popularList:SimpleCard[] = simpleCards.sort((a,b)=>b.view - a.view).slice(0, 2)
+const popularList: SimpleCard[] = simpleCards.sort((a, b) => b.view - a.view).slice(0, 2)
 
-const MainPageUI = ({popularList,hashList}:{popularList:SimpleCard[],hashList:Hash[]})=>{
+const MainPageUI = ({ popularList, hashList }: { popularList: SimpleCard[], hashList: Hash[] }) => {
 
-  /** 버튼 클릭시 카드 만들기 페이지로 이동하는 함수 */
-  const linkToCreateCard = () => {
-    // useLocation() 사용? > query 쓰기로 했으니 찾아보기
-  }
-    return (
-      <IndexSection>
-      <MainHeader>
-        dd
-      </MainHeader>
-      <ContentContainer>
-        <BannerContainer>Banner</BannerContainer>
+  return (
+    <Styled.IndexSection>
+      <Styled.MainHeader>
+        <img src="../images/logo_flip.svg" />
+        <img src="../images/icon_github.svg" />
+      </Styled.MainHeader>
+      <Styled.ContentContainer>
+        <Styled.BannerContainer>Banner</Styled.BannerContainer>
         <ul>
-          <SectionLabel># 해시태그</SectionLabel>
-          <HashtagItemList>
+          <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
+          <Styled.HashtagItemList>
             {calHashPropsList(hashList).map((hash) => (
-              <HashtagItem $backgroundColor={hash.color} key={hash.id}>#{hash.name}</HashtagItem>
+              <Styled.HashtagItem $backgroundColor={hash.color} key={hash.id}>#{hash.name}</Styled.HashtagItem>
             ))}
-          </HashtagItemList>
+          </Styled.HashtagItemList>
         </ul>
         <ul>
-          <SectionLabel>🔥 지금 HOT한 카드</SectionLabel>
-          {popularList
-              .map(p=>({...p,color:textToColor(COLORS_FOR_HOTTEST,p.title)}))
-              .map((popular) => (
-            <CardItem $backgroundColor={popular.color} key={popular.id}>
-              <p>{popular.title}</p>
-              <span>{popular.view}</span>
-            </CardItem>
+          <Styled.SectionLabel>🔥 지금 HOT한 카드</Styled.SectionLabel>
+          {popularList.map(p => ({ ...p, color: textToColor(COLORS_FOR_HOTTEST, p.title) })).map((popularCard) => (
+            <Styled.CardItem $backgroundColor={popularCard.color} key={popularCard.id}>
+              <p>{popularCard.title}</p>
+              <span>{popularCard.view}</span>
+            </Styled.CardItem>
           ))}
         </ul>
         <ul>
-          <SectionLabel>🗄 전체 카드</SectionLabel>
-          {simpleCards
-              .map(s=>({...s,color:textToColor(COLORS_FOR_CARD,s.title)}))
-              .map((simpleCard) => (
-            <CardItem $backgroundColor={simpleCard.color} key={simpleCard.id}>
+          <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
+          {simpleCards.map(s => ({ ...s, color: textToColor(COLORS_FOR_CARD, s.title) })).map((simpleCard) => (
+            <Styled.CardItem $backgroundColor={simpleCard.color} key={simpleCard.id}>
               <p>{simpleCard.title}</p>
               <span>{simpleCard.view}</span>
-            </CardItem>
+            </Styled.CardItem>
           ))}
         </ul>
-        <CreateCardButton type="button" onClick={linkToCreateCard}>
-          icon
-        </CreateCardButton>
-      </ContentContainer>
-    </IndexSection>
-    );
+        <Styled.CreateCardButton type="button">
+          <Link to="/makecard" >
+            icon
+          </Link>
+        </Styled.CreateCardButton>
+      </Styled.ContentContainer>
+    </Styled.IndexSection >
+  );
 }
 
 const MainPage = () => {
-    // const {data:hashList, error:error1 } = useFetch<Hash[]>('hashurl')
-    // const {data:popularList, error:error2 } = useFetch<SimpleCard[]>('popularList')
+  // const {data:hashList, error:error1 } = useFetch<Hash[]>('hashurl')
+  // const {data:popularList, error:error2 } = useFetch<SimpleCard[]>('popularList')
 
-    if(popularList&&hashList){
-        return <MainPageUI popularList={popularList} hashList={hashList} ></MainPageUI>;
-
-    }
-    return <div>!!!!error</div>
+  if (popularList && hashList) {
+    return <MainPageUI popularList={popularList} hashList={hashList} ></MainPageUI>;
+  }
+  return <div>!!!!error</div>
 
 };
 
@@ -183,18 +173,18 @@ const HashtagItemList = styled.div`
   }
 `
 
-const HashtagItem = styled.li<{$backgroundColor:string}>`
+const HashtagItem = styled.li<{ $backgroundColor: string }>`
   color: #121212;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   margin-right: 8px;
   padding: 8px 12px;
-  background-color: ${p=>p.$backgroundColor};  
+  background-color: ${p => p.$backgroundColor};  
   border: 0;
   border-radius: 12px;
 `
 
-const CardItem = styled.li<{$backgroundColor:string}>`
+const CardItem = styled.li<{ $backgroundColor: string }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -202,21 +192,24 @@ const CardItem = styled.li<{$backgroundColor:string}>`
   height: 52px;
   margin-bottom: 12px;
   padding: 12px 16px 8px;
-  background-color: ${p=>p.$backgroundColor};
+  background-color: ${p => p.$backgroundColor};
   border: 0;
   border-radius: 12px;
 
   p {
-    font-size: 20px;
-    font-weight: 700;
-    
-  }
+  font-size: 20px;
+  font-weight: 700;
+
+}
 
   span {
-    color: #525252;
-    font-size: 12px;
-    font-weight: 400;
-  }
+  color: #525252;
+  font-size: 12px;
+  font-weight: 400;
+}
 `
+const Styled = { CardItem, HashtagItem, HashtagItemList, CreateCardButton, SectionLabel, BannerContainer, IndexSection, MainHeader, ContentContainer }
+
+
 
 export default MainPage;
