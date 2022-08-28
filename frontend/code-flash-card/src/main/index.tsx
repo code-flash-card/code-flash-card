@@ -2,6 +2,7 @@ import { useFetch } from "../hooks";
 import { Link } from "react-router-dom";
 import styled from '@emotion/styled';
 import "../reset.css";
+import { textToColor } from "../utils";
 
 interface Banner {
   id: string;
@@ -46,7 +47,15 @@ const hashList: Hash[] = [
   },
 ]
 
+// 컬러가 될 수 있는 모든 색깔의 상수 나중에 섭이 정해주실예정.
+const COLORS_FOR_HASH = ['#3680FF', '#49C14E', '#F9A825', '#EA1B1A', '#FDD629']
+const COLORS_FOR_HOTTEST = ['#3680FF', '#49C14E', '#F9A825', '#EA1B1A', '#FDD629']
+const COLORS_FOR_CARD = ['#8cfc9f', '#58faa9', '#95fa43', '#faa92f', '#236DEF', '#185ACE']
 
+
+const calHashPropsList = (hashList: Hash[]) => {
+  return hashList.map(hash => ({ ...hash, color: textToColor(COLORS_FOR_HASH, hash.name) }))
+}
 
 // 가장 높은 view를 가진 최상위 리스트중 2개만 보여주기
 const popularList: SimpleCard[] = simpleCards.sort((a, b) => b.view - a.view).slice(0, 2)
@@ -63,15 +72,15 @@ const MainPageUI = ({ popularList, hashList }: { popularList: SimpleCard[], hash
         <ul>
           <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
           <Styled.HashtagItemList>
-            {hashList.map((hash) => (
-              <HashtagItem key={hash.id}>#{hash.name}</HashtagItem>
+            {calHashPropsList(hashList).map((hash) => (
+              <Styled.HashtagItem $backgroundColor={hash.color} key={hash.id}>#{hash.name}</Styled.HashtagItem>
             ))}
           </Styled.HashtagItemList>
         </ul>
         <ul>
           <Styled.SectionLabel>🔥 지금 HOT한 카드</Styled.SectionLabel>
-          {popularList.map((popularCard) => (
-            <Styled.CardItem key={popularCard.id}>
+          {popularList.map(p => ({ ...p, color: textToColor(COLORS_FOR_HOTTEST, p.title) })).map((popularCard) => (
+            <Styled.CardItem $backgroundColor={popularCard.color} key={popularCard.id}>
               <p>{popularCard.title}</p>
               <span>{popularCard.view}</span>
             </Styled.CardItem>
@@ -79,8 +88,8 @@ const MainPageUI = ({ popularList, hashList }: { popularList: SimpleCard[], hash
         </ul>
         <ul>
           <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
-          {simpleCards.map((simpleCard) => (
-            <Styled.CardItem key={simpleCard.id}>
+          {simpleCards.map(s => ({ ...s, color: textToColor(COLORS_FOR_CARD, s.title) })).map((simpleCard) => (
+            <Styled.CardItem $backgroundColor={simpleCard.color} key={simpleCard.id}>
               <p>{simpleCard.title}</p>
               <span>{simpleCard.view}</span>
             </Styled.CardItem>
@@ -163,29 +172,28 @@ const HashtagItemList = styled.div`
   }
 `
 
-
-const HashtagItem = styled.li`
-color: #121212;
-font - size: 16px;
-font - weight: 600;
-margin - right: 8px;
-padding: 8px 12px;
-background - color: orange;
-border: 0;
-border - radius: 12px;
+const HashtagItem = styled.li<{ $backgroundColor: string }>`
+  color: #121212;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 8px;
+  padding: 8px 12px;
+  background-color: ${p => p.$backgroundColor};  
+  border: 0;
+  border-radius: 12px;
 `
 
-const CardItem = styled.li`
-display: flex;
-flex - direction: column;
-justify - content: space - between;
-width: calc(100 % - 32px);
-height: 52px;
-margin - bottom: 12px;
-padding: 12px 16px 8px;
-background - color: lightgray;
-border: 0;
-border - radius: 12px;
+const CardItem = styled.li<{ $backgroundColor: string }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: calc(100% - 32px);
+  height: 52px;
+  margin-bottom: 12px;
+  padding: 12px 16px 8px;
+  background-color: ${p => p.$backgroundColor};
+  border: 0;
+  border-radius: 12px;
 
   p {
   font - size: 20px;

@@ -5,14 +5,13 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript',
-    'air-bnb'
+    'standard-with-typescript'
   ],
   overrides: [
   ],
   parserOptions: {
     ecmaVersion: 'latest',
-    project: ["tsconfig.json"],
+    project: ['tsconfig.json'],
     sourceType: 'module'
   },
   plugins: [
@@ -21,6 +20,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 0,
     indent: ['error', 2],
-    semi: ['error', 'always'],
+    semi: ['error', 'always']
   }
-}
+};
