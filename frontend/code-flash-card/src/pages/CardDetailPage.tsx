@@ -10,17 +10,17 @@ interface Card {
     answer: string;
     explain: string;
 }
-
-const { cardId } = useParams();
-const url = `https://weareboard.kr/teosp/v1/card${cardId}`;
 const forwardAtom = atom<boolean>(true);
 
 export default function CardDetailPage() {
+    const { cardId } = useParams();
     const [isForward, setIsForward] = useAtom(forwardAtom);
     const toggleCard = () => setIsForward(!isForward);
 
     // TODO : 첫번째 카드는 isForward로 바뀌는데 2번쨰는?? 첫번째는 false로 바뀌었을때 두번쨰카드는?
-    const { data, error } = useFetch<Card>(url);
+    const { data, error } = useFetch<Card>(
+        `https://weareboard.kr/teosp/v1/card${cardId}`
+    );
 
     const card: Card = {
         answer: data?.answer ?? "",
