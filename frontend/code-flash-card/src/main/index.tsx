@@ -35,6 +35,7 @@ const simpleCards: SimpleCard[] = [
   { id: '3', title: 'oop관련 프론트앤드 문제', hashId: '#1', view: 50 },
   { id: '4', title: '자바문제', hashId: '#3', view: 4 },
   { id: '5', title: 'HTML/CSS', hashId: '#4', view: 1 },
+  { id: '6', title: 'HTML/CSS문제', hashId: '#4', view: 50 },
 ]
 const hashList: Hash[] = [
   { id: '#1', name: 'oop', cards: simpleCards.filter(card => card.hashId === '#1') },
