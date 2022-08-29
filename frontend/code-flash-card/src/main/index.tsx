@@ -215,7 +215,7 @@ const formatSimpleCardList = (data: CardFromServer[]): SimpleCard[] => {
 
 const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
   return data.map((card) => ({
-    id: card.cardId.toString(),
+    id: card.hashtags[0].cardHashtagId.toString(),
     name: card.hashtags[0].name,
     cards: card,
   }));
