@@ -14,7 +14,7 @@
 `React` `React-Router` `TypeScript` `Emotion` `Jotai` `Vite`
 
 ### Back-End
-`Python`
+`Java`, `Spring`
 
 ## 프로젝트 결과물
 [링크](https://leeseongbok1214.github.io/flashcard/)를 클릭하면 해당 서비스로 이동합니다. (해당 서비스는 모바일 웹에서 편하게 이용 가능합니다.)
