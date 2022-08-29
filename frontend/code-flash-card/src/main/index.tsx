@@ -214,20 +214,11 @@ const formatSimpleCardList = (data: CardFromServer[]): SimpleCard[] => {
 };
 
 const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
-<<<<<<< HEAD
-
-    return data.map((card) => ({
-        id: card.cardId.toString(),
-        name: card.hashtags[0].name,
-        cards: card,
-    }));
-=======
   return data.map((card) => ({
-    id: card.cardId.toString(),
+    id: card.hashtags[0].cardHashtagId.toString(),
     name: card.hashtags[0].name,
     cards: card,
   }));
->>>>>>> c38a0aa6b0b378e77001e3bd38cd226c24f10224
 };
 
 const MainPage = () => {
