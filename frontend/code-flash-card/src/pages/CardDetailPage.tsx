@@ -4,10 +4,12 @@ import { useFetch } from "../hooks";
 
 import BackSpaceBtn from "../components/BackSpaceBtn";
 import DetailCard from "../components/DetailCard";
-// import FlashCardsNav from "../components/FlashCardsNav";
 import FlashCardsTitle from "../components/FlashCardsTitle";
 import PrevNextBtn from "../components/PrevNextBtn";
 import styled from "@emotion/styled";
+import {
+    useEffect
+} from 'react'
 
 interface Card {
     answer: string;
@@ -46,7 +48,26 @@ export default function CardDetailPage() {
     };
 
     const MOCK_TITLE = '#자바스크립트';
-    //  
+    //
+    useEffect(()=>{
+        const asyncAddView =async ()=>{
+            try {
+                const res = await fetch(`https://weareboard.kr/teosp/v1/card/${cardId}/view`, {
+                    method: "PUT",
+                })
+                if (res.ok) {
+                    const data = await res.json()
+                    console.log(data)
+                }
+            } catch (e) {
+                alert('알 수 없는 문제가 발생했습니다.')
+            }
+
+        }
+
+        asyncAddView()
+
+    },[])
     return (
         <>
             <CardDetailPageWrapper>
