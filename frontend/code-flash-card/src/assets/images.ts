@@ -5,6 +5,7 @@ const images = {
     icon_view: "/flashcard/assets/images/icon_view.svg",
     icon_create: "/flashcard/assets/images/icon_create.svg",
     bulb_off: "/flashcard/assets/images/bulb_off.svg",
+    bulb_on: "/flashcard/assets/images/bulb_on.svg",
     icon_close: "/flashcard/assets/images/icon_close.svg",
     icon_back: "/flashcard/assets/images/icon_arrow_left.svg",
     banner: "/flashcard/assets/images/banner.svg",

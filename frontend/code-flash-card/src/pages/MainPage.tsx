@@ -15,6 +15,7 @@ type SimpleCard = {
   id: string;
   title: string;
   hashId: string;
+  hashName:string;
   view: number;
 };
 
@@ -115,7 +116,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
                 <p>{popularCard.title}</p>
                 <InfoContainer>
                   <li>
-                    <span>#hashtag</span>
+                    <span>#{popularCard.hashName}</span>
                   </li>
                   <li>
                     <img src={images.icon_view}/>
@@ -142,7 +143,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
                 <p>{simpleCard.title}</p>
                 <InfoContainer>
                   <li>
-                    <span>#hashtag</span>
+                    <span>#{simpleCard.hashName}</span>
                   </li>
                   <li>
                     <img src={images.icon_view}/>
@@ -196,6 +197,7 @@ const formatSimpleCardList = (data: CardFromServer[]): SimpleCard[] => {
     id: card.cardId.toString(),
     title: card.explain,
     hashId: card.hashtags[0].cardHashtagId.toString(),
+    hashName:card.hashtags[0].name,
     view: card.viewCount,
   }));
 };
@@ -214,7 +216,7 @@ const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
     })
   })
 
-return Object.entries(hashMap).map(([hashName,item])=>({id:item.id.toString(),name:hashName}))
+  return Object.entries(hashMap).map(([hashName,item])=>({id:item.id.toString(),name:hashName}))
 };
 
 const CardListGroup = () => {
