@@ -110,6 +110,23 @@ const isShowModalEnabled = (state: UIState): boolean => {
     state.hashtagInputValue !== ""
   );
 };
+
+const FORWARD_MAX_LENGTH = 30;
+const BACKWARD_MAX_LENGTH = 150;
+
+interface HashTagFromServer {
+  cardHashtagId: number;
+  name: string;
+}
+interface CardFromServer {
+  cardId: number;
+  explain: string;
+  answer: string;
+  viewCount: number;
+  hashtags: HashTagFromServer[];
+}
+
+
 /** 카드 컴포넌트 */
 const MakeCard = () => {
   const [cardInfo, dispatch] = useReducer(makeCardReducer, {
@@ -118,26 +135,37 @@ const MakeCard = () => {
     backwardInput: "",
     summitState: "disableSubmit",
   });
-
-  const [isShowModal, setIsShowModal] = useState(false);
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (cardInfo.summitState === 'enableSubmit') {
-      fetch("https://weareboard.kr/teosp/v1/card", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(cardInfo.form)
-      })
-    }
-  };
+  const [submitState,setSubmitState] = useState<'idle'|'onSubmitting'>('idle')
   const navigation = useNavigate();
   const hideModal = () => {
     setIsShowModal(false);
   };
 
+  const [isShowModal, setIsShowModal] = useState(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitState('onSubmitting')
+    if (cardInfo.summitState === 'enableSubmit') {
+      try {
+        const res = await fetch("https://weareboard.kr/teosp/v1/card", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(cardInfo.form)
+        })
+        if (res.ok) {
+          const data = await res.json() as CardFromServer
+          navigation(`/makecard/${data.cardId}/done`)
+        }else{
+          alert('카드 생성에 실패했습니다.')
+        }
+      } catch (e) {
+        alert('알 수 없는 문제가 발생했습니다.')
+      }
+      setSubmitState('idle')
+    }
+  }
   return (
     <>
       <Styled.MakeCardContainer>
@@ -160,9 +188,11 @@ const MakeCard = () => {
         <Styled.MakeCardForm onSubmit={onSubmit}>
           <Styled.InputContainer>
             <p>카테고리</p>
+            <div>
+
             <input
               type="text"
-              maxLength={15}
+              maxLength={FORWARD_MAX_LENGTH}
               value={cardInfo.hashtagInputValue}
               onChange={(e) => {
                 const value = e.target.value;
@@ -170,51 +200,62 @@ const MakeCard = () => {
               }}
               placeholder="만드실 카드의 카테고리를 입력해주세요."
             />
+            </div>
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>앞면(문제)</p>
+            <div style={{position:'relative',display:'flex', alignItems:'center'}}>
             <input
               type="text"
               value={cardInfo.forwardInput}
               onChange={(e) => {
                 const value = e.target.value;
-                let slicedValue;
-                if (value.length > 15) {
-                  slicedValue = value.substring(0, 15)
-                  console.log(slicedValue, value);
+
+                if (value.length > FORWARD_MAX_LENGTH) {
+                  return
                 }
-                dispatch({ type: "INPUT_FORWARD", value: slicedValue ?? undefined });
+
+                dispatch({ type: "INPUT_FORWARD", value: value  });
               }}
-              // onInput={(e) => {
-              //   const value = e.target.value;
-              //   if (value.length > 15) {
-              //     value = value.substr(0, 15)
-              //   }
-              //   console.log(e.target.value)
-              // }}
               placeholder="만드실 카드의 앞면(문제)을 채워주세요."
             />
+              <span style={{
+                  position:'absolute',
+                  right:5,
+                  color:(cardInfo?.forwardInput?.length ?? 0) ===FORWARD_MAX_LENGTH ? '#F0474B':'#A8A8A8',
+                  fontSize:12
+                }}>{cardInfo?.forwardInput?.length ?? 0}/{FORWARD_MAX_LENGTH}</span>
+            </div>
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>뒷면(답)</p>
+            <div style={{position:'relative'}}>
+
             <textarea
-              maxLength={150}
+              maxLength={BACKWARD_MAX_LENGTH}
               value={cardInfo.backwardInput}
               onChange={(e) => {
                 const value = e.target.value;
-                let slicedValue;
-                if (value.length > 150) {
-                  slicedValue = value.substring(0, 150)
-                  console.log(slicedValue, value);
+                if (value.length > BACKWARD_MAX_LENGTH) {
+                  return
                 }
-                dispatch({ type: "INPUT_BACKWARD", value: slicedValue ?? undefined });
+                dispatch({ type: "INPUT_BACKWARD", value: value  });
               }}
               placeholder="만드실 카드의 뒷면(답)을 채워주세요."
             />
+              <span style={{
+                position:'absolute',
+                right:15,
+                bottom:15,
+                color:(cardInfo?.backwardInput?.length ?? 0) ===BACKWARD_MAX_LENGTH ? '#F0474B':'#A8A8A8',
+                fontSize:12
+              }}>{cardInfo?.backwardInput?.length ?? 0}/{BACKWARD_MAX_LENGTH}</span>
+
+            </div>
           </Styled.InputContainer>
           <Styled.SubmitButton
             type="submit"
-            disabled={cardInfo.summitState === "disableSubmit"}
+            disabled={cardInfo.summitState === "disableSubmit" || submitState==='onSubmitting'}
           >
             카드 만들기
           </Styled.SubmitButton>
@@ -277,11 +318,11 @@ const InputContainer = styled.div`
   input {
     width: calc(100% - 24px);
     padding: 14px 12px;
-    font-size: 16px;
+    font-size: 14px;
     background-color: #3d3d3d;
     border: 0;
     border-radius: 12px;
-
+    color:#fcfcfc;
     :focus {
       outline: none;
     }
@@ -291,11 +332,12 @@ const InputContainer = styled.div`
     width: calc(100% - 24px);
     height: 154px;
     padding: 14px 12px;
-    font-size: 16px;
+    font-size: 14px;
     background-color: #3d3d3d;
     border: 0;
     border-radius: 12px;
     resize: none;
+    color:#fcfcfc;
 
     :focus {
       outline: none;
