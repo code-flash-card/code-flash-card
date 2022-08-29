@@ -11,21 +11,21 @@ export default function FlashCard({ card }: { card: Card }) {
   const onClickImg = () => {
     navigate(`/detail/${cardId}`)
   }
-    const { explain, viewCount, cardId } = card;
-    return (
-        // <Link to={`/detail/${cardId}`}>
-            <Styled.CardItem onClick={onClickImg}>
-                <TitleText>{explain}</TitleText>
-                <ViewText><img src={images.icon_view}/>{viewCount}</ViewText>
-            </Styled.CardItem>
-        // </Link>
-    );
+  const { explain, viewCount, cardId } = card;
+  return (
+    // <Link to={`/detail/${cardId}`}>
+    <Styled.CardItem onClick={onClickImg}>
+      <TitleText>{explain}</TitleText>
+      <ViewText><img src={images.icon_view} />{viewCount}</ViewText>
+    </Styled.CardItem>
+    // </Link>
+  );
 }
 
 const CardItem = styled.li`
-    width: 130px;
-    height: 140px;
-    padding: 15px;
+    width: 124px;
+    height: 124px;
+    padding: 16px;
     background: #36e1c2;
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
     border-radius: 16px;

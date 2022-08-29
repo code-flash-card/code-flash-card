@@ -56,7 +56,7 @@ const MakeCardDonePage = () => {
                 <Styled.Text>카드를 만들었어요!</Styled.Text>
                 <Styled.Text>만들어진 카드를 확인해보세요.</Styled.Text>
                 <Styled.ButtonSection>
-                    <ActivativeButton onClick={() => nav(`/detail/${cardId}`)}>
+                    <ActivativeButton onClick={() => nav(`/`)}>
                         카드 보러가기
                     </ActivativeButton>
                 </Styled.ButtonSection>

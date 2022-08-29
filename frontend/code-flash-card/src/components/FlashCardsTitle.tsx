@@ -9,7 +9,7 @@ export default function FlashCardsTitle({ title }: { title: string }) {
 }
 
 const H1 = styled.h1`
-    margin-left: 10px;
+    // margin-left: 10px;
     font-weight: 600;
     font-size: 28px;
     line-height: 34px;

@@ -1,4 +1,4 @@
-import {useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { atom, useAtom } from "jotai";
 import { useFetch } from "../hooks";
 
@@ -7,9 +7,8 @@ import DetailCard from "../components/DetailCard";
 import FlashCardsTitle from "../components/FlashCardsTitle";
 import PrevNextBtn from "../components/PrevNextBtn";
 import styled from "@emotion/styled";
-import {
-    useEffect
-} from 'react'
+import { useEffect, useState } from 'react'
+import images from "../assets/images"
 
 interface Card {
     answer: string;
@@ -30,18 +29,18 @@ interface CardFromServer {
     hashtags: HashTagFromServer[];
 }
 
-const forwardAtom = atom<boolean>(true);
+// const forwardAtom = atom<boolean>(true);
 
 export default function CardDetailPage() {
     const { cardId } = useParams();
-    const [isForward, setIsForward] = useAtom(forwardAtom);
+    const [isForward, setIsForward] = useState<boolean>(true);
     const toggleCard = () => setIsForward(!isForward);
     const navigate = useNavigate()
-    const { data:cardList, error } = useFetch<CardFromServer[]>(
+    const { data: cardList, error } = useFetch<CardFromServer[]>(
         `https://weareboard.kr/teosp/v1/card`
     );
-    useEffect(()=>{
-        const asyncAddView =async ()=>{
+    useEffect(() => {
+        const asyncAddView = async () => {
             try {
                 const res = await fetch(`https://weareboard.kr/teosp/v1/card/${cardId}/view`, {
                     method: "PUT",
@@ -58,41 +57,41 @@ export default function CardDetailPage() {
 
         asyncAddView()
 
-    },[])
+    }, [])
 
-    if(!cardList){
+    if (!cardList) {
         return (<CardDetailPageWrapper> </CardDetailPageWrapper>)
     }
 
-    const currentIndex = (cards:CardFromServer[],cardId:string)=>cards.findIndex(card=>card.cardId.toString()===cardId)
+    const currentIndex = (cards: CardFromServer[], cardId: string) => cards.findIndex(card => card.cardId.toString() === cardId)
 
-    const isFirst = (index:number) => index ===0
-    const isLast = (index:number,cards:unknown[])=>cards.length-1 === index
-    const card: Card = cardList.filter(card=>card.cardId.toString()===cardId).find(card=>({
+    const isFirst = (index: number) => index === 0
+    const isLast = (index: number, cards: unknown[]) => cards.length - 1 === index
+    const card: Card = cardList.filter(card => card.cardId.toString() === cardId).find(card => ({
         answer: card?.answer ?? "",
         explain: card?.explain ?? "",
         hashtags: card?.hashtags ?? [{ cardHashtagId: 1, name: '' }]
     }))!
     const hashName = card.hashtags[0].name
-    const filteredCardListByHashName= cardList.filter(card=>hashName===card.hashtags[0].name)
+    const filteredCardListByHashName = cardList.filter(card => hashName === card.hashtags[0].name)
 
 
-    const onClickBefore = ()=>{
-        const cIndex = currentIndex(filteredCardListByHashName,cardId??"")
-        if(isFirst(cIndex)){
+    const onClickBefore = () => {
+        const cIndex = currentIndex(filteredCardListByHashName, cardId ?? "")
+        if (isFirst(cIndex)) {
             return
         }
-        navigate(`/detail/${filteredCardListByHashName[cIndex-1].cardId}`)
+        navigate(`/detail/${filteredCardListByHashName[cIndex - 1].cardId}`)
     }
 
-    const onClickAfter = ()=>{
-        const cIndex = currentIndex(filteredCardListByHashName,cardId??"")
-        if(isLast(cIndex,filteredCardListByHashName)){
+    const onClickAfter = () => {
+        const cIndex = currentIndex(filteredCardListByHashName, cardId ?? "")
+        if (isLast(cIndex, filteredCardListByHashName)) {
             // 팡파레 ui 필요
             navigate(`/hashtags/${hashName}/congratuation`)
 
         }
-        navigate(`/detail/${filteredCardListByHashName[cIndex+1].cardId}`)
+        navigate(`/detail/${filteredCardListByHashName[cIndex + 1].cardId}`)
 
     }
     return (
@@ -100,15 +99,19 @@ export default function CardDetailPage() {
             <CardDetailPageWrapper>
                 <Styled.PageHeader>
                     <BackSpaceBtn />
-                    <progress value={filteredCardListByHashName.findIndex(card=>card.cardId.toString()===cardId)} max={filteredCardListByHashName.length } />
-                    <div className={'empty'}></div>
+                    <progress
+                        value={filteredCardListByHashName.findIndex(card => card.cardId.toString() === cardId)}
+                        max={filteredCardListByHashName.length}
+                        style={{ height: '10px' }}
+                    />
+                    <div className={'empty'} style={{ width: '24px', height: '24px' }}></div>
                 </Styled.PageHeader>
                 <Styled.TitleWrapper>
-                    <FlashCardsTitle title={`#${hashName}`} />
+                    <FlashCardsTitle title={`# ${hashName}`} />
                 </Styled.TitleWrapper>
                 <CardDetailContainer>
-
-                    {isForward ? (
+                    {/* <Between1/> */}
+                    {/* {isForward ? (
                         <DetailCard
                             title="Question"
                             content={card.explain}
@@ -120,10 +123,66 @@ export default function CardDetailPage() {
                             content={card.answer}
                             onClick={toggleCard}
                         />
-                    )}
+                    )} */}
+                    <CardContainer style={{
+                        position: 'relative',
+                        width: '244px',
+                        height: '290px',
+                        perspective: '350px',
+
+                    }} onClick={toggleCard}>
+                        <div className="cardWrapper" style={{
+                            position: 'relative',
+                            width: '244px',
+                            height: '290px',
+                            perspective: '350px',
+                            transition: '1s',
+                            transformStyle: 'preserve-3d'
+                        }}>
+                            <div className="front" style={{
+                                position: 'absolute',
+                                backfaceVisibility: 'hidden',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '244px',
+                                height: '290px',
+                                backgroundColor: '#F4F4F4',
+                                borderRadius: '16px'
+                            }}>
+                                <Styled.CardHeader>
+                                    <img src={images.bulb_off} />
+                                    <p>Question</p>
+                                </Styled.CardHeader>
+                                <Styled.CardContent>
+                                    <p>{card.explain || '설명(하드코딩)'}</p>
+                                    <span>카드를 누르면 답을 확인할 수 있어요!</span>
+                                </Styled.CardContent>
+                            </div>
+                            <div className="back" style={{
+                                position: 'absolute',
+                                backfaceVisibility: 'hidden',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '244px',
+                                height: '290px',
+                                backgroundColor: '#F4F4F4',
+                                borderRadius: '16px',
+                                transform: 'rotateY(180deg)'
+                            }}>
+                                <Styled.CardHeader>
+                                    <img src={images.bulb_on} />
+                                    <p>Answer</p>
+                                </Styled.CardHeader>
+                                <Styled.CardContent>
+                                    <p>{card.answer || '설명(하드코딩)'}</p>
+                                    <span>카드 바깥을 누르면 원래대로 돌아와요!</span>
+                                </Styled.CardContent>
+                            </div>
+                        </div>
+                    </CardContainer>
                     <Styled.BtnContainer>
-                        <Styled.Button onClick={onClickBefore} disabled={isFirst(currentIndex(filteredCardListByHashName,cardId??""))}>이전 문제</Styled.Button>
-                        <Button onClick={onClickAfter}>{isLast(currentIndex(filteredCardListByHashName,cardId??''),filteredCardListByHashName)?'완료 하기':'다음 문제'}</Button>
+                        <Styled.Button onClick={onClickBefore} disabled={isFirst(currentIndex(filteredCardListByHashName, cardId ?? ""))}>이전 문제</Styled.Button>
+                        <Button onClick={onClickAfter}>{isLast(currentIndex(filteredCardListByHashName, cardId ?? ''), filteredCardListByHashName) ? '완료 하기' : '다음 문제'}</Button>
                     </Styled.BtnContainer>
 
                 </CardDetailContainer>
@@ -132,7 +191,11 @@ export default function CardDetailPage() {
         </>
     );
 }
-
+const CardContainer = styled.div`
+    &:hover .cardWrapper{
+    transform: rotateY(180deg);
+  }
+`
 
 const BtnContainer = styled.div`
   display: flex;
@@ -161,9 +224,9 @@ const Button = styled.button`
 
 
 const CardDetailPageWrapper = styled.div`
-display:flex;
-flex-direction:column;
-justify-contents:center;
+    display:flex;
+    flex-direction:column;
+    justify-contents:center;
     background-color: #272727;
     height: 100vh;
     
@@ -181,11 +244,12 @@ const PageHeader = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
+    align-items: center;
     padding: 12px 16px;
 `;
 
 const TitleWrapper = styled.div`
-    margin-left: 8px;
+    margin-left: 16px;
 `;
 
 const CardDetailContainer = styled.div`
@@ -197,8 +261,55 @@ const CardDetailContainer = styled.div`
     margin: 85px 16px 24px;
 `;
 
+const CardHeader = styled.div`
+  background-color: #36e1c2;
+  overflow: hidden;
+  padding: 12px;
+  height:43px;
+  border: 0;
+  border-radius: 16px 16px 0 0;
+
+  p {
+    margin-top: 4px;
+    margin-left: 4px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+`
+
+const CardContent = styled.div`
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  height: 217px;
+  margin: 16px 16px 12px;
+
+  p {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+
+    width: 212px;
+    height: 160px;
+
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  span {
+    color: #A8A8A8;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 12px;
+  }
+`
+
 // const Between1 = styled.div`
 //     padding-top: 30px;
 // `;
 
-const Styled = { PageHeader, TitleWrapper, CardDetailContainer,BtnContainer,Button }
+const Styled = { PageHeader, TitleWrapper, CardDetailContainer, BtnContainer, Button, CardHeader, CardContent }

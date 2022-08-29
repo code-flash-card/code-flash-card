@@ -22,11 +22,11 @@ export default function FlashCards({ cards }: { cards: Card[] }) {
 }
 const Cover = styled.ul`
     display: flex;
-    padding-left: 10px;
-    padding-right: 10px;
+    // padding-left: 10px;
+    // padding-right: 10px;
     flex: 1 1 40%;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 16px;
     
    
 `;
@@ -34,7 +34,7 @@ const Cover = styled.ul`
 const MeddleSection = styled.div`
     display: flex;
     justify-content: space-around;
-    gap: 12px;
+    gap: 16px;
 `;
 
 const Styled = { Cover };
