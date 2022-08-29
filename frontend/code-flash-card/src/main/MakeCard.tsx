@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CloseBtn from "../components/CloseBtn";
+import SimpleCloseBtn from "../components/SimpleCloseBtn";
 import { AskingStopMakingCardModal } from "../components/AskingStopMakingCardModal";
 import "../reset.css";
 
@@ -181,7 +181,7 @@ const MakeCard = () => {
             }}
             style={{ position: "absolute", left: 5, color: "wheat" }}
           >
-            <CloseBtn />
+            <SimpleCloseBtn />
           </div>
           <p>카드 만들기</p>
         </Styled.MakeCardHeader>
