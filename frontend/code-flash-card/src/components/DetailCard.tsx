@@ -1,28 +1,17 @@
 import styled from "@emotion/styled"
 import images from "../assets/images"
 
-export default function DetailCard({ title, content, onClick } : {title: string, content: string, onClick: () => void }) {
+export default function DetailCard({ title, content, onClick }: { title: string, content: string, onClick: () => void }) {
   return (
     <Styled.CardDiv onClick={onClick}>
       <Styled.CardHeader>
-        <img src={images.bulb_off}/>
+        <img src={images.bulb_off} />
         <p>{title}</p>
       </Styled.CardHeader>
       <Styled.CardContent>
-        <p style={{ fontWeight:700, fontSize:20, textAlign:"center" }}>{content ||  '설명(하드코딩)'}</p>
-        
+        <p style={{ fontWeight: 700, fontSize: 20, textAlign: "center" }}>{content || '설명(하드코딩)'}</p>
+        <span>카드를 누르면 {title} 확인할 수 있어요</span>
       </Styled.CardContent>
-      <div className="footer" style={{ color:'#A8A8A8',fontWeight: 500,height:80,
-fontSize: 10,
-lineHeight: 12,
-display:'flex',
-justifyContent:'center',
-
-
-}}>
-      <p>카드를 누르면 {title} 확인할 수 있어요</p>
-      </div>
-      
     </Styled.CardDiv>
   )
 }
@@ -53,15 +42,19 @@ const CardHeader = styled.div`
 `
 
 const CardContent = styled.div`
-  display:flex; 
-  flex-grow: 1;
-  justify-content: center;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  text-align: center;
+  height: 217px;
+  margin: 16px 16px 12px;
 
   p {
     display: flex;
     align-items: center;
     text-align: center;
+    justify-content: center;
 
     width: 212px;
     height: 160px;
@@ -70,6 +63,13 @@ const CardContent = styled.div`
     font-size: 20px;
     line-height: 28px;
   }
+
+  span {
+    color: #A8A8A8;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 12px;
+  }
 `
 
-const Styled = {CardDiv,CardHeader, CardContent }
+const Styled = { CardDiv, CardHeader, CardContent }

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { atom, useAtom } from "jotai";
 import { useFetch } from "../hooks";
 
-import BackSpaceBut from "../components/BackSpaceBtn";
+import BackSpaceBtn from "../components/BackSpaceBtn";
 import DetailCard from "../components/DetailCard";
 // import FlashCardsNav from "../components/FlashCardsNav";
 import FlashCardsTitle from "../components/FlashCardsTitle";
@@ -42,37 +42,41 @@ export default function CardDetailPage() {
     const card: Card = {
         answer: data?.answer ?? "",
         explain: data?.explain ?? "",
-        hashtags:data?.hashtags ?? [{cardHashtagId:1,name:''}]
+        hashtags: data?.hashtags ?? [{ cardHashtagId: 1, name: '' }]
     };
 
     const MOCK_TITLE = '#자바스크립트';
-//  
+    //  
     return (
         <>
-        <CardDetailPageWrapper>
-            {/* <FlashCardsNav /> */}
-            <BackSpaceBut />
-            <FlashCardsTitle title={MOCK_TITLE} />
-            <CardDetailContainer>
-            {/* <Between1/> */}
+            <CardDetailPageWrapper>
+                {/* <FlashCardsNav /> */}
+                <Styled.PageHeader>
+                    <BackSpaceBtn />
+                </Styled.PageHeader>
+                <Styled.TitleWrapper>
+                    <FlashCardsTitle title={MOCK_TITLE} />
+                </Styled.TitleWrapper>
+                <CardDetailContainer>
+                    {/* <Between1/> */}
 
-            {isForward ? (
-                <DetailCard
-                    title="Question"
-                    content={card.explain}
-                    onClick={toggleCard}
-                />
-            ) : (
-                <DetailCard
-                    title="Answer"
-                    content={card.answer}
-                    onClick={toggleCard}
-                />
-            )}
-            <PrevNextBtn />
-            </CardDetailContainer>
+                    {isForward ? (
+                        <DetailCard
+                            title="Question"
+                            content={card.explain}
+                            onClick={toggleCard}
+                        />
+                    ) : (
+                        <DetailCard
+                            title="Answer"
+                            content={card.answer}
+                            onClick={toggleCard}
+                        />
+                    )}
+                    <PrevNextBtn />
+                </CardDetailContainer>
             </CardDetailPageWrapper>
-            
+
         </>
     );
 }
@@ -93,6 +97,17 @@ justify-contents:center;
     }
 `;
 
+const PageHeader = styled.div`
+    width: calc(100% - 32px);
+    height: 24px;
+    margin-bottom: 8px;
+    padding: 12px 16px;
+`;
+
+const TitleWrapper = styled.div`
+    margin-left: 8px;
+`;
+
 const CardDetailContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -106,3 +121,4 @@ const CardDetailContainer = styled.div`
 //     padding-top: 30px;
 // `;
 
+const Styled = { PageHeader, TitleWrapper, CardDetailContainer }
