@@ -50,8 +50,8 @@ const calculateSummitState = (
  */
 const calculateForm = (state: UIState): SubmitForm => {
   return {
-    answer: state.forwardInput,
-    explain: state.backwardInput,
+    answer: state.backwardInput,
+    explain: state.forwardInput,
     hashtags: [state.hashtagInputValue],
   };
 };
@@ -147,19 +147,20 @@ const MakeCardPage = () => {
     setSubmitState('onSubmitting')
     if (cardInfo.summitState === 'enableSubmit') {
       try {
-        const res = await fetch("https://weareboard.kr/teosp/v1/card", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(cardInfo.form)
-        })
-        if (res.ok) {
-          const data = await res.json() as CardFromServer
-          navigation(`/makecard/${data.cardId}/done`)
-        } else {
-          alert('카드 생성에 실패했습니다.')
-        }
+        console.log(cardInfo.form)
+        // const res = await fetch("https://weareboard.kr/teosp/v1/card", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify(cardInfo.form)
+        // })
+        // if (res.ok) {
+        //   const data = await res.json() as CardFromServer
+        //   navigation(`/makecard/${data.cardId}/done`)
+        // } else {
+        //   alert('카드 생성에 실패했습니다.')
+        // }
       } catch (e) {
         alert('알 수 없는 문제가 발생했습니다.')
       }
