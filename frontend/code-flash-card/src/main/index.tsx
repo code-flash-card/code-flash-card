@@ -101,12 +101,15 @@ const MainPageUI = ({
           <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
           <Styled.HashtagItemList>
             {calHashPropsList(hashList).map((hash) => (
-              <Styled.HashtagItem
-                $backgroundColor={hash.color}
-                key={hash.id}
-              >
-                #{hash.name}
-              </Styled.HashtagItem>
+              //TODO: hashtags 관련 페이지로 이동 구현
+              <Link to={`/hashtags`}>
+                <Styled.HashtagItem
+                  $backgroundColor={hash.color}
+                  key={hash.id}
+                >
+                  #{hash.name}
+                </Styled.HashtagItem>
+              </Link>
             ))}
           </Styled.HashtagItemList>
         </ul>
@@ -120,21 +123,23 @@ const MainPageUI = ({
               color: textToColor(COLORS_FOR_HOTTEST, p.title),
             }))
             .map((popularCard) => (
-              <Styled.CardItem
-                $backgroundColor={popularCard.color}
-                key={popularCard.id}
-              >
-                <p>{popularCard.title}</p>
-                <InfoContainer>
-                  <li>
-                    <span>#hashtag</span>
-                  </li>
-                  <li>
-                    <img src={images.icon_view} />
-                    <span>{popularCard.view}</span>
-                  </li>
-                </InfoContainer>
-              </Styled.CardItem>
+              <Link to={`/detail/:${popularCard.id}"`}>
+                <Styled.CardItem
+                  $backgroundColor={popularCard.color}
+                  key={popularCard.id}
+                >
+                  <p>{popularCard.title}</p>
+                  <InfoContainer>
+                    <li>
+                      <span>#hashtag</span>
+                    </li>
+                    <li>
+                      <img src={images.icon_view} />
+                      <span>{popularCard.view}</span>
+                    </li>
+                  </InfoContainer>
+                </Styled.CardItem>
+              </Link>
             ))}
         </ul>
         <ul>
@@ -145,21 +150,23 @@ const MainPageUI = ({
               color: textToColor(COLORS_FOR_CARD, s.title),
             }))
             .map((simpleCard) => (
-              <Styled.CardItem
-                $backgroundColor={simpleCard.color}
-                key={simpleCard.id}
-              >
-                <p>{simpleCard.title}</p>
-                <InfoContainer>
-                  <li>
-                    <span>#hashtag</span>
-                  </li>
-                  <li>
-                    <img src={images.icon_view} />
-                    <span>{simpleCard.view}</span>
-                  </li>
-                </InfoContainer>
-              </Styled.CardItem>
+              <Link to={`/detail/:${simpleCard.id}"`}>
+                <Styled.CardItem
+                  $backgroundColor={simpleCard.color}
+                  key={simpleCard.id}
+                >
+                  <p>{simpleCard.title}</p>
+                  <InfoContainer>
+                    <li>
+                      <span>#hashtag</span>
+                    </li>
+                    <li>
+                      <img src={images.icon_view} />
+                      <span>{simpleCard.view}</span>
+                    </li>
+                  </InfoContainer>
+                </Styled.CardItem>
+              </Link>
             ))}
         </ul>
         <Styled.CreateCardButton type="button">
