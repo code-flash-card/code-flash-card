@@ -1,18 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Card } from "./FlashCards";
 import "../reset.css";
 import styled from "@emotion/styled";
 
+
 export default function FlashCard({ card }: { card: Card }) {
+  const navigate = useNavigate()
+  const onClickImg = () => {
+    navigate(`/detail/${cardId}`)
+  }
     const { explain, viewCount, cardId } = card;
     return (
-        <Link to={`/detail/${cardId}`}>
-            <Styled.CardItem>
+        // <Link to={`/detail/${cardId}`}>
+            <Styled.CardItem onClick={onClickImg}>
                 <TitleText>{explain}</TitleText>
-                <span>{viewCount}</span>
+                <ViewText>{viewCount}</ViewText>
             </Styled.CardItem>
-        </Link>
+        // </Link>
     );
 }
 
@@ -23,6 +28,7 @@ const CardItem = styled.li`
     background: #36e1c2;
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
     border-radius: 16px;
+    position: relative;
     // margin-top: 10px;
 `;
 
@@ -33,3 +39,9 @@ const TitleText = styled.p`
     color: black;
     font-weight: 700;
 `;
+
+const ViewText = styled.div`
+  position: absolute;
+  top: 80%;
+  color: black; 
+`

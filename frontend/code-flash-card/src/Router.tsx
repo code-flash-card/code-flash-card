@@ -8,9 +8,9 @@ import HashTagListPage from "./pages/HashTagListPage";
 
 function Router() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="flashcard">
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="" element={<MainPage />} />
         <Route path="/makecard" element={<MakeCard />} />
         <Route path="/makecard/:cardId/done" element={<MakeCardDonePage />} />
         <Route path="/detail/:cardId" element={<CardDetailPage />} />
