@@ -6,33 +6,44 @@ import FlashCards, { Card } from "../components/FlashCards";
 import FlashCardsNav from "../components/FlashCardsNav";
 import FlashCardsTitle from "../components/FlashCardsTitle";
 import styled from "@emotion/styled";
+import { useParams } from "react-router-dom";
+import { CardFromServer } from "../types";
 
 const url = `https://weareboard.kr/teosp/v1/card`;
 
 export default function HashTagListPage() {
-    const { data, error } = useFetch<Card[]>(url);
-    console.log(data);
+  const {hashName} = useParams()
+    const { data, error } = useFetch<CardFromServer[]>(url);
+    if(data){
     const cards =
-        data?.map((card) => {
+        data.filter(card=>card.hashtags[0].name===hashName).map((card) => {
             return {
                 cardId: card.cardId,
                 explain: card.explain,
                 viewCount: card.viewCount,
             };
-        }) || [];
-    console.log(error);
-
-    const mockKeyword = "# 자바스크립트";
-
-    return (
+        })
+      return (
         <HashTagListPageWrapper>
-            <FlashCardsNav />
-            <Between1 />
-            <FlashCardsTitle title={mockKeyword} />
-            <Between2 />
-            <FlashCards cards={cards} />
+          <FlashCardsNav />
+          <Between1 />
+          <div style={{padding:20}}>
+
+          <FlashCardsTitle title={`# ${hashName ?? ''}`} />
+          <Between2 />
+          <FlashCards cards={cards} />
+          </div>
         </HashTagListPageWrapper>
-    );
+      );
+
+    }
+    if(error){
+      return <div>...error</div>
+    }
+    // loading
+    return <HashTagListPageWrapper>
+      <FlashCardsNav />
+    </HashTagListPageWrapper>
 }
 
 const Between1 = styled.div`

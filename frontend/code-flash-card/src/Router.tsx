@@ -14,7 +14,7 @@ function Router() {
         <Route path="/makecard" element={<MakeCard />} />
         <Route path="/makecard/:cardId/done" element={<MakeCardDonePage />} />
         <Route path="/detail/:cardId" element={<CardDetailPage />} />
-        <Route path="/hashtags" element={<HashTagListPage />} />
+        <Route path="/hashtags/:hashName" element={<HashTagListPage />} />
       </Routes>
     </BrowserRouter>
   );
