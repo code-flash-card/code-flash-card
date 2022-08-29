@@ -5,6 +5,7 @@ const images = {
     icon_view: "/assets/images/icon_view.svg",
     icon_create: "/assets/images/icon_create.svg",
     bulb_off: "/assets/images/bulb_off.svg",
+    bulb_on: "/assets/images/bulb_on.svg",
     icon_close: "/assets/images/icon_close.svg",
     icon_back: "/assets/images/icon_arrow_left.svg",
     banner: "/assets/images/banner.svg",

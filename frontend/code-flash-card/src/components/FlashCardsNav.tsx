@@ -1,16 +1,21 @@
 import styled from "@emotion/styled";
 import CloseBtn from "./CloseBtn";
+import BackSpaceBtn from "./BackSpaceBtn";
 
 export default function FlashCardsNav() {
     return (
-        <Text>
-            <CloseBtn />
-        </Text>
+        <BtnContainer>
+            {/* <CloseBtn /> */}
+            <BackSpaceBtn />
+        </BtnContainer>
     );
 }
 
 
-const Text = styled.div`
-text-align:left;
-color: red;
+const BtnContainer = styled.div`
+height: 48px;
+display: flex;
+align-items: center;
+width: calc(100% - 32px);
+padding: 0 16px;
 `

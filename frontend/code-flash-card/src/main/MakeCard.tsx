@@ -135,7 +135,7 @@ const MakeCard = () => {
     backwardInput: "",
     summitState: "disableSubmit",
   });
-  const [submitState,setSubmitState] = useState<'idle'|'onSubmitting'>('idle')
+  const [submitState, setSubmitState] = useState<'idle' | 'onSubmitting'>('idle')
   const navigation = useNavigate();
   const hideModal = () => {
     setIsShowModal(false);
@@ -157,7 +157,7 @@ const MakeCard = () => {
         if (res.ok) {
           const data = await res.json() as CardFromServer
           navigation(`/makecard/${data.cardId}/done`)
-        }else{
+        } else {
           alert('카드 생성에 실패했습니다.')
         }
       } catch (e) {
@@ -190,72 +190,72 @@ const MakeCard = () => {
             <p>카테고리</p>
             <div>
 
-            <input
-              type="text"
-              maxLength={FORWARD_MAX_LENGTH}
-              value={cardInfo.hashtagInputValue}
-              onChange={(e) => {
-                const value = e.target.value;
-                dispatch({ type: "INPUT_CATEGORY", value });
-              }}
-              placeholder="만드실 카드의 카테고리를 입력해주세요."
-            />
+              <input
+                type="text"
+                maxLength={FORWARD_MAX_LENGTH}
+                value={cardInfo.hashtagInputValue}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  dispatch({ type: "INPUT_CATEGORY", value });
+                }}
+                placeholder="만드실 카드의 카테고리를 입력해주세요."
+              />
             </div>
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>앞면(문제)</p>
-            <div style={{position:'relative',display:'flex', alignItems:'center'}}>
-            <input
-              type="text"
-              value={cardInfo.forwardInput}
-              onChange={(e) => {
-                const value = e.target.value;
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type="text"
+                value={cardInfo.forwardInput}
+                onChange={(e) => {
+                  const value = e.target.value;
 
-                if (value.length > FORWARD_MAX_LENGTH) {
-                  return
-                }
+                  if (value.length > FORWARD_MAX_LENGTH) {
+                    return
+                  }
 
-                dispatch({ type: "INPUT_FORWARD", value: value  });
-              }}
-              placeholder="만드실 카드의 앞면(문제)을 채워주세요."
-            />
+                  dispatch({ type: "INPUT_FORWARD", value: value });
+                }}
+                placeholder="만드실 카드의 앞면(문제)을 채워주세요."
+              />
               <span style={{
-                  position:'absolute',
-                  right:5,
-                  color:(cardInfo?.forwardInput?.length ?? 0) ===FORWARD_MAX_LENGTH ? '#F0474B':'#A8A8A8',
-                  fontSize:12
-                }}>{cardInfo?.forwardInput?.length ?? 0}/{FORWARD_MAX_LENGTH}</span>
+                position: 'absolute',
+                right: 12,
+                color: (cardInfo?.forwardInput?.length ?? 0) === FORWARD_MAX_LENGTH ? '#F0474B' : '#A8A8A8',
+                fontSize: 12
+              }}>{cardInfo?.forwardInput?.length ?? 0}/{FORWARD_MAX_LENGTH}</span>
             </div>
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>뒷면(답)</p>
-            <div style={{position:'relative'}}>
+            <div style={{ position: 'relative' }}>
 
-            <textarea
-              maxLength={BACKWARD_MAX_LENGTH}
-              value={cardInfo.backwardInput}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value.length > BACKWARD_MAX_LENGTH) {
-                  return
-                }
-                dispatch({ type: "INPUT_BACKWARD", value: value  });
-              }}
-              placeholder="만드실 카드의 뒷면(답)을 채워주세요."
-            />
+              <textarea
+                maxLength={BACKWARD_MAX_LENGTH}
+                value={cardInfo.backwardInput}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length > BACKWARD_MAX_LENGTH) {
+                    return
+                  }
+                  dispatch({ type: "INPUT_BACKWARD", value: value });
+                }}
+                placeholder="만드실 카드의 뒷면(답)을 채워주세요."
+              />
               <span style={{
-                position:'absolute',
-                right:15,
-                bottom:15,
-                color:(cardInfo?.backwardInput?.length ?? 0) ===BACKWARD_MAX_LENGTH ? '#F0474B':'#A8A8A8',
-                fontSize:12
+                position: 'absolute',
+                right: 16,
+                bottom: 16,
+                color: (cardInfo?.backwardInput?.length ?? 0) === BACKWARD_MAX_LENGTH ? '#F0474B' : '#A8A8A8',
+                fontSize: 12
               }}>{cardInfo?.backwardInput?.length ?? 0}/{BACKWARD_MAX_LENGTH}</span>
 
             </div>
           </Styled.InputContainer>
           <Styled.SubmitButton
             type="submit"
-            disabled={cardInfo.summitState === "disableSubmit" || submitState==='onSubmitting'}
+            disabled={cardInfo.summitState === "disableSubmit" || submitState === 'onSubmitting'}
           >
             카드 만들기
           </Styled.SubmitButton>
@@ -318,7 +318,7 @@ const InputContainer = styled.div`
   input {
     width: calc(100% - 24px);
     padding: 14px 12px;
-    font-size: 14px;
+    font-size: 16px;
     background-color: #3d3d3d;
     border: 0;
     border-radius: 12px;
@@ -332,7 +332,8 @@ const InputContainer = styled.div`
     width: calc(100% - 24px);
     height: 154px;
     padding: 14px 12px;
-    font-size: 14px;
+    font-size: 16px;
+    font-family: 'san-serif';
     background-color: #3d3d3d;
     border: 0;
     border-radius: 12px;
