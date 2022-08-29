@@ -124,6 +124,7 @@ q:after {
   content: "";
   content: none;
 }
+a {color: unset; text-decoration: none; outline: none}
 
 table {
   border-collapse: collapse;

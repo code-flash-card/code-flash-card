@@ -1,10 +1,11 @@
-import { useFetch } from "../hooks";
-import { Link } from "react-router-dom";
+import {useFetch} from "../hooks";
+import {Link} from "react-router-dom";
 import styled from "@emotion/styled";
 import "../reset.css";
-import { textToColor } from "../utils";
+import {textToColor} from "../utils";
 import React from "react";
 import images from "../assets/images";
+
 interface Banner {
   id: string;
   content: string;
@@ -69,10 +70,7 @@ const calHashPropsList = (hashList: Hash[]) => {
   }));
 };
 
-const MainPageUI = ({
-  simpleCardList,
-  hashList,
-}: {
+const CardListGroupUI = ({ simpleCardList, hashList }: {
   simpleCardList: SimpleCard[];
   hashList: Hash[];
 }) => {
@@ -82,100 +80,81 @@ const MainPageUI = ({
     .slice(0, 2);
 
   return (
-    <Styled.IndexSection>
-      <Styled.MainHeader>
-        <Link to="/">
-          <img src={images.logo_flip} />
-        </Link>
-        <a href="https://github.com/code-flash-card/code-flash-card">
-          <img src={images.icon_github} />
-        </a>
-      </Styled.MainHeader>
-      <Styled.ContentContainer>
-        <Link to="/">
-          <Styled.BannerContainer>
-            <img src={images.banner} />
-          </Styled.BannerContainer>
-        </Link>
-        <ul>
-          <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
-          <Styled.HashtagItemList>
-            {calHashPropsList(hashList).map((hash) => (
-              //TODO: hashtags 관련 페이지로 이동 구현
-              <Link to={`/hashtags`}>
-                <Styled.HashtagItem
-                  $backgroundColor={hash.color}
-                  key={hash.id}
-                >
-                  #{hash.name}
-                </Styled.HashtagItem>
-              </Link>
-            ))}
-          </Styled.HashtagItemList>
-        </ul>
-        <ul>
-          <Styled.SectionLabel>
-            🔥 지금 HOT한 카드
-          </Styled.SectionLabel>
-          {popularList
-            .map((p) => ({
-              ...p,
-              color: textToColor(COLORS_FOR_HOTTEST, p.title),
-            }))
-            .map((popularCard) => (
-              <Link to={`/detail/:${popularCard.id}"`}>
-                <Styled.CardItem
-                  $backgroundColor={popularCard.color}
-                  key={popularCard.id}
-                >
-                  <p>{popularCard.title}</p>
-                  <InfoContainer>
-                    <li>
-                      <span>#hashtag</span>
-                    </li>
-                    <li>
-                      <img src={images.icon_view} />
-                      <span>{popularCard.view}</span>
-                    </li>
-                  </InfoContainer>
-                </Styled.CardItem>
-              </Link>
-            ))}
-        </ul>
-        <ul>
-          <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
-          {simpleCardList
-            .map((s) => ({
-              ...s,
-              color: textToColor(COLORS_FOR_CARD, s.title),
-            }))
-            .map((simpleCard) => (
-              <Link to={`/detail/:${simpleCard.id}"`}>
-                <Styled.CardItem
-                  $backgroundColor={simpleCard.color}
-                  key={simpleCard.id}
-                >
-                  <p>{simpleCard.title}</p>
-                  <InfoContainer>
-                    <li>
-                      <span>#hashtag</span>
-                    </li>
-                    <li>
-                      <img src={images.icon_view} />
-                      <span>{simpleCard.view}</span>
-                    </li>
-                  </InfoContainer>
-                </Styled.CardItem>
-              </Link>
-            ))}
-        </ul>
-        <Styled.CreateCardButton type="button">
-          <Link to="/makecard">
-            <img src={images.icon_create} />
-          </Link>
-        </Styled.CreateCardButton>
-      </Styled.ContentContainer>
-    </Styled.IndexSection>
+    <>
+      <ul>
+        <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
+        <Styled.HashtagItemList>
+          {calHashPropsList(hashList).map((hash) => (
+            //TODO: hashtags 관련 페이지로 이동 구현
+            <Link to={`/hashtags`} key={hash.id}>
+              <Styled.HashtagItem
+                $backgroundColor={hash.color}
+                key={hash.id}
+              >
+                #{hash.name}
+              </Styled.HashtagItem>
+            </Link>
+          ))}
+        </Styled.HashtagItemList>
+      </ul>
+      <ul>
+        <Styled.SectionLabel>
+          🔥 지금 HOT한 카드
+        </Styled.SectionLabel>
+        {popularList
+          .map((p) => ({
+            ...p,
+            color: textToColor(COLORS_FOR_HOTTEST, p.title),
+          }))
+          .map((popularCard) => (
+            <Link to={`/detail/${popularCard.id}`} key={popularCard.id}>
+              <Styled.CardItem
+                $backgroundColor={popularCard.color}
+                key={popularCard.id}
+              >
+                <p>{popularCard.title}</p>
+                <InfoContainer>
+                  <li>
+                    <span>#hashtag</span>
+                  </li>
+                  <li>
+                    <img src={images.icon_view}/>
+                    <span>{popularCard.view}</span>
+                  </li>
+                </InfoContainer>
+              </Styled.CardItem>
+            </Link>
+          ))}
+      </ul>
+      <ul>
+        <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
+        {simpleCardList
+          .map((s) => ({
+            ...s,
+            color: textToColor(COLORS_FOR_CARD, s.title),
+          }))
+          .map((simpleCard) => (
+            <Link to={`/detail/${simpleCard.id}`} key={simpleCard.id}>
+              <Styled.CardItem
+                $backgroundColor={simpleCard.color}
+                key={simpleCard.id}
+              >
+                <p>{simpleCard.title}</p>
+                <InfoContainer>
+                  <li>
+                    <span>#hashtag</span>
+                  </li>
+                  <li>
+                    <img src={images.icon_view}/>
+                    <span>{simpleCard.view}</span>
+                  </li>
+                </InfoContainer>
+              </Styled.CardItem>
+            </Link>
+          ))}
+      </ul>
+    </>
+
   );
 };
 
@@ -183,6 +162,7 @@ interface HashTagFromServer {
   cardHashtagId: number;
   name: string;
 }
+
 interface CardFromServer {
   cardId: number;
   explain: string;
@@ -221,147 +201,189 @@ const formatSimpleCardList = (data: CardFromServer[]): SimpleCard[] => {
 };
 
 const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
-  return data.map((card) => ({
-    id: card.hashtags[0].cardHashtagId.toString(),
-    name: card.hashtags[0].name,
-    cards: card,
-  }));
+
+
+  const hashMap:Record<string, { cardList:CardFromServer []; id:number }> = {}
+  data.forEach(card=>{
+    card.hashtags.forEach((hash)=>{
+      if(hashMap?.[hash.name]){
+        hashMap[hash.name].cardList.push(card)
+      }else{
+        hashMap[hash.name] = {cardList:[card],id:hash.cardHashtagId}
+      }
+    })
+  })
+
+return Object.entries(hashMap).map(([hashName,item])=>({id:item.id.toString(),name:hashName}))
 };
 
-const MainPage = () => {
-  const { data: cardListFromServer, error } = useFetch<CardFromServer[]>(
+const CardListGroup = () => {
+  const {data: cardListFromServer, error} = useFetch<CardFromServer[]>(
     "https://weareboard.kr/teosp/v1/card"
   );
 
-  if (cardListFromServer) {
-    const simpleCardList = formatSimpleCardList(cardListFromServer);
-    const simpleHashList = formatSimpleHashList(cardListFromServer);
-
-    return (
-      <MainPageUI
-        simpleCardList={simpleCardList}
-        hashList={simpleHashList}
-      ></MainPageUI>
-    );
-  } else if (error) {
+  if (!cardListFromServer) {
+    return <div style={{display:'flex',justifyContent:'center'}}>Loading...</div>;
+  }
+  if (error) {
     return <div>!!!!error</div>;
   }
-  return <div>Loading...</div>;
+  const simpleCardList = formatSimpleCardList(cardListFromServer);
+  const simpleHashList = formatSimpleHashList(cardListFromServer);
+
+  return (
+    <CardListGroupUI
+      simpleCardList={simpleCardList}
+      hashList={simpleHashList}
+    ></CardListGroupUI>
+  );
+
+}
+
+const MainPage = () => {
+
+  return (
+    <Styled.IndexSection>
+      <Styled.MainHeader>
+        <Link to="/">
+          <img src={images.logo_flip}/>
+        </Link>
+        <a href="https://github.com/code-flash-card/code-flash-card">
+          <img src={images.icon_github}/>
+        </a>
+      </Styled.MainHeader>
+      <Styled.ContentContainer>
+        <Link to="/">
+          <Styled.BannerContainer>
+            <img src={images.banner}/>
+          </Styled.BannerContainer>
+        </Link>
+        <CardListGroup/>
+        <Styled.CreateCardButton type="button">
+          <Link to="/makecard">
+            <img src={images.icon_create}/>
+          </Link>
+        </Styled.CreateCardButton>
+      </Styled.ContentContainer>
+    </Styled.IndexSection>
+
+  )
+
 };
 
 const IndexSection = styled.div`
-    background-color: #272727;
-    height: 100vh;
-    padding-bottom: 24px;
-    overflow: auto;
-    white-space: nowrap;
+  background-color: #272727;
+  height: 100vh;
+  padding-bottom: 24px;
+  overflow: auto;
+  white-space: nowrap;
 
-    ::-webkit-scrollbar {
-        display: none;
-    }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const MainHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding: 16px;
-    margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  margin-bottom: 16px;
 `;
 
 const ContentContainer = styled.div`
-    margin: 0 16px;
+  margin: 0 16px;
 `;
 const BannerContainer = styled.div`
-    width: 100%;
-    height: 160px;
-    background-color: #121212;
-    border: 0;
-    border-radius: 12px;
-    overflow: hidden;
+  width: 100%;
+  height: 160px;
+  background-color: #121212;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
 
-    img {
-        margin-left: 24px;
-        margin-top: -16px;
-    }
+  img {
+    margin-left: 24px;
+    margin-top: -16px;
+  }
 `;
 
 const SectionLabel = styled.li`
-    color: #fff;
-    font-size: 20px;
-    font-weight: 600;
-    margin: 24px 0 12px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 24px 0 12px;
 `;
 
 const CreateCardButton = styled.button`
-    z-index: 1000;
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 56px;
-    height: 56px;
-    padding: 12px;
-    background-color: #3680ff;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.25);
-    border: 1px solid #2f79fa;
-    border-radius: 56px;
+  z-index: 1000;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  padding: 12px;
+  background-color: #3680ff;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.25);
+  border: 1px solid #2f79fa;
+  border-radius: 56px;
 `;
 
 const HashtagItemList = styled.div`
-    display: flex;
-    overflow: auto;
-    white-space: nowrap;
+  display: flex;
+  overflow: auto;
+  white-space: nowrap;
 
-    ::-webkit-scrollbar {
-        display: none;
-    }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const HashtagItem = styled.li<{ $backgroundColor: string }>`
-    color: #121212;
-    font-size: 16px;
-    font-weight: 700;
-    margin-right: 8px;
-    padding: 8px 12px;
-    background-color: ${(p) => p.$backgroundColor};
-    border: 0;
-    border-radius: 12px;
+  color: #121212;
+  font-size: 16px;
+  font-weight: 700;
+  margin-right: 8px;
+  padding: 8px 12px;
+  background-color: ${(p) => p.$backgroundColor};
+  border: 0;
+  border-radius: 12px;
 `;
 
 const CardItem = styled.li<{ $backgroundColor: string }>`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: calc(100% - 32px);
-    height: 52px;
-    margin-bottom: 12px;
-    padding: 12px 16px 8px;
-    background-color: ${(p) => p.$backgroundColor};
-    border: 0;
-    border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: calc(100% - 32px);
+  height: 52px;
+  margin-bottom: 12px;
+  padding: 12px 16px 8px;
+  background-color: ${(p) => p.$backgroundColor};
+  border: 0;
+  border-radius: 12px;
 
-    p {
-        font-size: 20px;
-        font-weight: 700;
-    }
+  p {
+    font-size: 20px;
+    font-weight: 700;
+  }
 `;
 
 const InfoContainer = styled.ul`
+  display: flex;
+
+  li {
     display: flex;
 
-    li {
-        display: flex;
-
-        span {
-            color: #3d3d3d;
-            font-size: 14px;
-            font-weight: 400;
-            padding-top: 6px;
-        }
-
-        :nth-of-type(1) {
-            margin-right: 8px;
-        }
+    span {
+      color: #3d3d3d;
+      font-size: 14px;
+      font-weight: 400;
+      padding-top: 6px;
     }
+
+    :nth-of-type(1) {
+      margin-right: 8px;
+    }
+  }
 `;
 
 const Styled = {
