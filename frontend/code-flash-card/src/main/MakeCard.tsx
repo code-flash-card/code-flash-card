@@ -9,30 +9,30 @@ import "../reset.css";
  * 스웨거 바탕으로 정의한 formData 스키마
  */
 type SubmitForm = {
-  answer: string;
-  explain: string;
+  answer: string | undefined;
+  explain: string | undefined;
   hashtags: [string];
 };
 interface enableSubmitState {
   summitState: "enableSubmit";
   hashtagInputValue: string;
-  forwardInput: string;
-  backwardInput: string;
+  forwardInput: string | undefined;
+  backwardInput: string | undefined;
   form: SubmitForm;
 }
 interface disableSubmitState {
   summitState: "disableSubmit";
   hashtagInputValue: string;
-  forwardInput: string;
-  backwardInput: string;
+  forwardInput: string | undefined;
+  backwardInput: string | undefined;
 }
 
 type UIState = disableSubmitState | enableSubmitState;
 
 type Action =
   | { type: "INPUT_CATEGORY"; value: string }
-  | { type: "INPUT_FORWARD"; value: string }
-  | { type: "INPUT_BACKWARD"; value: string };
+  | { type: "INPUT_FORWARD"; value: string | undefined }
+  | { type: "INPUT_BACKWARD"; value: string | undefined };
 
 const calculateSummitState = (
   state: UIState
@@ -110,7 +110,7 @@ const isShowModalEnabled = (state: UIState): boolean => {
     state.hashtagInputValue !== ""
   );
 };
-
+/** 카드 컴포넌트 */
 const MakeCard = () => {
   const [cardInfo, dispatch] = useReducer(makeCardReducer, {
     hashtagInputValue: "",
@@ -123,15 +123,15 @@ const MakeCard = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (cardInfo.summitState === 'enableSubmit') {
-    //   fetch("url", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify(cardInfo.form)
-    //   })
-    // }
+    if (cardInfo.summitState === 'enableSubmit') {
+      fetch("https://weareboard.kr/teosp/v1/card", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(cardInfo.form)
+      })
+    }
   };
   const navigation = useNavigate();
   const hideModal = () => {
@@ -166,9 +166,6 @@ const MakeCard = () => {
               value={cardInfo.hashtagInputValue}
               onChange={(e) => {
                 const value = e.target.value;
-                if (!value) {
-                  return;
-                }
                 dispatch({ type: "INPUT_CATEGORY", value });
               }}
               placeholder="만드실 카드의 카테고리를 입력해주세요."
@@ -181,11 +178,20 @@ const MakeCard = () => {
               value={cardInfo.forwardInput}
               onChange={(e) => {
                 const value = e.target.value;
-                if (!value) {
-                  return;
+                let slicedValue;
+                if (value.length > 15) {
+                  slicedValue = value.substring(0, 15)
+                  console.log(slicedValue, value);
                 }
-                dispatch({ type: "INPUT_FORWARD", value });
+                dispatch({ type: "INPUT_FORWARD", value: slicedValue ?? undefined });
               }}
+              // onInput={(e) => {
+              //   const value = e.target.value;
+              //   if (value.length > 15) {
+              //     value = value.substr(0, 15)
+              //   }
+              //   console.log(e.target.value)
+              // }}
               placeholder="만드실 카드의 앞면(문제)을 채워주세요."
             />
           </Styled.InputContainer>
@@ -196,10 +202,12 @@ const MakeCard = () => {
               value={cardInfo.backwardInput}
               onChange={(e) => {
                 const value = e.target.value;
-                if (!value) {
-                  return;
+                let slicedValue;
+                if (value.length > 15) {
+                  slicedValue = value.substring(0, 15)
+                  console.log(slicedValue, value);
                 }
-                dispatch({ type: "INPUT_BACKWARD", value });
+                dispatch({ type: "INPUT_BACKWARD", value: slicedValue ?? undefined });
               }}
               placeholder="만드실 카드의 뒷면(답)을 채워주세요."
             />
