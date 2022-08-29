@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
-import BackSpaceBut from "./BackSpaceBtn";
+import CloseBtn from "./CloseBtn";
 
 export default function FlashCardsNav() {
     return (
         <Text>
-            <BackSpaceBut />
+            <CloseBtn />
         </Text>
     );
 }

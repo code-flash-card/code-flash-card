@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import BackSpaceBtn from "../components/BackSpaceBtn";
+import CloseBtn from "../components/CloseBtn";
 import { AskingStopMakingCardModal } from "../components/AskingStopMakingCardModal";
 import "../reset.css";
 
@@ -153,7 +153,7 @@ const MakeCard = () => {
             }}
             style={{ position: "absolute", left: 5, color: "wheat" }}
           >
-            <BackSpaceBtn />
+            <CloseBtn />
           </div>
           <p>카드 만들기</p>
         </Styled.MakeCardHeader>
