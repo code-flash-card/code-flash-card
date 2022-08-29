@@ -89,9 +89,10 @@ export default function CardDetailPage() {
         const cIndex = currentIndex(filteredCardListByHashName,cardId??"")
         if(isLast(cIndex,filteredCardListByHashName)){
             // 팡파레 ui 필요
-            navigate(`/`)
+            navigate(`/hashtags/${hashName}/congratuation`)
+
         }
-        navigate(`/hashtags/${hashName}/congratuation`)
+        navigate(`/detail/${filteredCardListByHashName[cIndex+1].cardId}`)
 
     }
     return (
