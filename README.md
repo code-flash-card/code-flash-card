@@ -14,7 +14,10 @@
 `React` `React-Router` `TypeScript` `Emotion` `Jotai` `Vite`
 
 ### Back-End
-`Java`, `Spring`
+`Java`, `Spring`, `MariaDB`
+
+### API DOC
+[링크](http://weareboard.kr/teosp/swagger-ui/index.html#/)를 클릭하면 해당 문서로 이동합니다.
 
 ## 프로젝트 결과물
 [링크](https://leeseongbok1214.github.io/flashcard/)를 클릭하면 해당 서비스로 이동합니다. (해당 서비스는 모바일 웹에서 편하게 이용 가능합니다.)
@@ -34,7 +37,5 @@
 - `refactor`: 코드 리펙토링
 - `test`: 테스트 코드, 리펙토링 테스트 코드 추가
 - `chore`: 빌드 업무 수정, 패키지 매니저 수정
-
-### 진행 과정
 
 ### 구현 기능
