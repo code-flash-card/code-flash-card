@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Card } from "./FlashCards";
 import "../reset.css";
 import styled from "@emotion/styled";
+import images from "../assets/images";
 
 
 export default function FlashCard({ card }: { card: Card }) {
@@ -11,12 +12,11 @@ export default function FlashCard({ card }: { card: Card }) {
     navigate(`/detail/${cardId}`)
   }
     const { explain, viewCount, cardId } = card;
-  console.log('cid',card.cardId)
     return (
         // <Link to={`/detail/${cardId}`}>
             <Styled.CardItem onClick={onClickImg}>
                 <TitleText>{explain}</TitleText>
-                <ViewText>{viewCount}</ViewText>
+                <ViewText><img src={images.icon_view}/>{viewCount}</ViewText>
             </Styled.CardItem>
         // </Link>
     );
@@ -43,6 +43,9 @@ const TitleText = styled.p`
 
 const ViewText = styled.div`
   position: absolute;
+  display: flex;
+  
+  align-items: center;
   top: 80%;
   color: black; 
 `
