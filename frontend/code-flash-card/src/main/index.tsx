@@ -6,27 +6,27 @@ import { textToColor } from "../utils";
 import React from "react";
 import images from "../assets/images";
 interface Banner {
-    id: string;
-    content: string;
+  id: string;
+  content: string;
 }
 
 type SimpleCard = {
-    id: string;
-    title: string;
-    hashId: string;
-    view: number;
+  id: string;
+  title: string;
+  hashId: string;
+  view: number;
 };
 
 interface Hash {
-    id: string;
-    name: string;
-    // cards: SimpleCard[]
+  id: string;
+  name: string;
+  // cards: SimpleCard[]
 }
 
 interface MainState {
-    banner: Banner;
-    hashList: Hash[];
-    popularList: SimpleCard[];
+  banner: Banner;
+  hashList: Hash[];
+  popularList: SimpleCard[];
 }
 
 // const simpleCards: SimpleCard[] = [
@@ -46,142 +46,142 @@ interface MainState {
 // 컬러가 될 수 있는 모든 색깔의 상수 나중에 섭이 정해주실예정.
 const COLORS_FOR_HASH = ["#36E1C2", "#F9FC60", "#61EB98", "#D88B54", "#809DAD"];
 const COLORS_FOR_HOTTEST = [
-    "#D861EB",
-    "#35E1C2",
-    "#E56060",
-    "#F9FC5F",
-    "#635FFC",
+  "#D861EB",
+  "#35E1C2",
+  "#E56060",
+  "#F9FC5F",
+  "#635FFC",
 ];
 const COLORS_FOR_CARD = [
-    "#00bbf9",
-    "#fee440",
-    "#9b5de5",
-    "#06d6a0",
-    "#eb5e28",
-    "#8da9c4",
-    "#62b6cb",
+  "#00bbf9",
+  "#fee440",
+  "#9b5de5",
+  "#06d6a0",
+  "#eb5e28",
+  "#8da9c4",
+  "#62b6cb",
 ];
 
 const calHashPropsList = (hashList: Hash[]) => {
-    return hashList.map((hash) => ({
-        ...hash,
-        color: textToColor(COLORS_FOR_HASH, hash.name),
-    }));
+  return hashList.map((hash) => ({
+    ...hash,
+    color: textToColor(COLORS_FOR_HASH, hash.name),
+  }));
 };
 
 const MainPageUI = ({
-    simpleCardList,
-    hashList,
+  simpleCardList,
+  hashList,
 }: {
-    simpleCardList: SimpleCard[];
-    hashList: Hash[];
+  simpleCardList: SimpleCard[];
+  hashList: Hash[];
 }) => {
-    // 가장 높은 view를 가진 최상위 리스트중 2개만 보여주기
-    const popularList: SimpleCard[] = simpleCardList
-        .sort((a, b) => b.view - a.view)
-        .slice(0, 2);
+  // 가장 높은 view를 가진 최상위 리스트중 2개만 보여주기
+  const popularList: SimpleCard[] = simpleCardList
+    .sort((a, b) => b.view - a.view)
+    .slice(0, 2);
 
-    return (
-        <Styled.IndexSection>
-            <Styled.MainHeader>
-                <Link to="/">
-                    <img src={images.logo_flip} />
-                </Link>
-                <a href="https://github.com/code-flash-card/code-flash-card">
-                    <img src={images.icon_github} />
-                </a>
-            </Styled.MainHeader>
-            <Styled.ContentContainer>
-                <Link to="/">
-                    <Styled.BannerContainer>
-                        <img src="../images/banner.svg" />
-                    </Styled.BannerContainer>
-                </Link>
-                <ul>
-                    <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
-                    <Styled.HashtagItemList>
-                        {calHashPropsList(hashList).map((hash) => (
-                            <Styled.HashtagItem
-                                $backgroundColor={hash.color}
-                                key={hash.id}
-                            >
-                                #{hash.name}
-                            </Styled.HashtagItem>
-                        ))}
-                    </Styled.HashtagItemList>
-                </ul>
-                <ul>
-                    <Styled.SectionLabel>
-                        🔥 지금 HOT한 카드
-                    </Styled.SectionLabel>
-                    {popularList
-                        .map((p) => ({
-                            ...p,
-                            color: textToColor(COLORS_FOR_HOTTEST, p.title),
-                        }))
-                        .map((popularCard) => (
-                            <Styled.CardItem
-                                $backgroundColor={popularCard.color}
-                                key={popularCard.id}
-                            >
-                                <p>{popularCard.title}</p>
-                                <InfoContainer>
-                                    <li>
-                                        <span>#hashtag</span>
-                                    </li>
-                                    <li>
-                                        <img src={images.icon_view} />
-                                        <span>{popularCard.view}</span>
-                                    </li>
-                                </InfoContainer>
-                            </Styled.CardItem>
-                        ))}
-                </ul>
-                <ul>
-                    <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
-                    {simpleCardList
-                        .map((s) => ({
-                            ...s,
-                            color: textToColor(COLORS_FOR_CARD, s.title),
-                        }))
-                        .map((simpleCard) => (
-                            <Styled.CardItem
-                                $backgroundColor={simpleCard.color}
-                                key={simpleCard.id}
-                            >
-                                <p>{simpleCard.title}</p>
-                                <InfoContainer>
-                                    <li>
-                                        <span>#hashtag</span>
-                                    </li>
-                                    <li>
-                                        <img src={images.icon_view} />
-                                        <span>{simpleCard.view}</span>
-                                    </li>
-                                </InfoContainer>
-                            </Styled.CardItem>
-                        ))}
-                </ul>
-                <Styled.CreateCardButton type="button">
-                    <Link to="/makecard">
-                        <img src={images.icon_create} />
-                    </Link>
-                </Styled.CreateCardButton>
-            </Styled.ContentContainer>
-        </Styled.IndexSection>
-    );
+  return (
+    <Styled.IndexSection>
+      <Styled.MainHeader>
+        <Link to="/">
+          <img src={images.logo_flip} />
+        </Link>
+        <a href="https://github.com/code-flash-card/code-flash-card">
+          <img src={images.icon_github} />
+        </a>
+      </Styled.MainHeader>
+      <Styled.ContentContainer>
+        <Link to="/">
+          <Styled.BannerContainer>
+            <img src={images.banner} />
+          </Styled.BannerContainer>
+        </Link>
+        <ul>
+          <Styled.SectionLabel># 해시태그</Styled.SectionLabel>
+          <Styled.HashtagItemList>
+            {calHashPropsList(hashList).map((hash) => (
+              <Styled.HashtagItem
+                $backgroundColor={hash.color}
+                key={hash.id}
+              >
+                #{hash.name}
+              </Styled.HashtagItem>
+            ))}
+          </Styled.HashtagItemList>
+        </ul>
+        <ul>
+          <Styled.SectionLabel>
+            🔥 지금 HOT한 카드
+          </Styled.SectionLabel>
+          {popularList
+            .map((p) => ({
+              ...p,
+              color: textToColor(COLORS_FOR_HOTTEST, p.title),
+            }))
+            .map((popularCard) => (
+              <Styled.CardItem
+                $backgroundColor={popularCard.color}
+                key={popularCard.id}
+              >
+                <p>{popularCard.title}</p>
+                <InfoContainer>
+                  <li>
+                    <span>#hashtag</span>
+                  </li>
+                  <li>
+                    <img src={images.icon_view} />
+                    <span>{popularCard.view}</span>
+                  </li>
+                </InfoContainer>
+              </Styled.CardItem>
+            ))}
+        </ul>
+        <ul>
+          <Styled.SectionLabel>🗄 전체 카드</Styled.SectionLabel>
+          {simpleCardList
+            .map((s) => ({
+              ...s,
+              color: textToColor(COLORS_FOR_CARD, s.title),
+            }))
+            .map((simpleCard) => (
+              <Styled.CardItem
+                $backgroundColor={simpleCard.color}
+                key={simpleCard.id}
+              >
+                <p>{simpleCard.title}</p>
+                <InfoContainer>
+                  <li>
+                    <span>#hashtag</span>
+                  </li>
+                  <li>
+                    <img src={images.icon_view} />
+                    <span>{simpleCard.view}</span>
+                  </li>
+                </InfoContainer>
+              </Styled.CardItem>
+            ))}
+        </ul>
+        <Styled.CreateCardButton type="button">
+          <Link to="/makecard">
+            <img src={images.icon_create} />
+          </Link>
+        </Styled.CreateCardButton>
+      </Styled.ContentContainer>
+    </Styled.IndexSection>
+  );
 };
 
 interface HashTagFromServer {
-    cardHashtagId: number;
-    name: string;
+  cardHashtagId: number;
+  name: string;
 }
 interface CardFromServer {
-    cardId: number;
-    explain: string;
-    answer: string;
-    viewCount: number;
-    hashtags: HashTagFromServer[];
+  cardId: number;
+  explain: string;
+  answer: string;
+  viewCount: number;
+  hashtags: HashTagFromServer[];
 }
 
 // type SimpleCard = {
@@ -205,42 +205,50 @@ interface CardFromServer {
 // ]
 
 const formatSimpleCardList = (data: CardFromServer[]): SimpleCard[] => {
-    return data.map((card) => ({
-        id: card.cardId.toString(),
-        title: card.explain,
-        hashId: card.hashtags[0].cardHashtagId.toString(),
-        view: card.viewCount,
-    }));
+  return data.map((card) => ({
+    id: card.cardId.toString(),
+    title: card.explain,
+    hashId: card.hashtags[0].cardHashtagId.toString(),
+    view: card.viewCount,
+  }));
 };
 
 const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
+<<<<<<< HEAD
 
     return data.map((card) => ({
         id: card.cardId.toString(),
         name: card.hashtags[0].name,
         cards: card,
     }));
+=======
+  return data.map((card) => ({
+    id: card.cardId.toString(),
+    name: card.hashtags[0].name,
+    cards: card,
+  }));
+>>>>>>> c38a0aa6b0b378e77001e3bd38cd226c24f10224
 };
 
 const MainPage = () => {
-    const { data: cardListFromServer, error } = useFetch<CardFromServer[]>(
-        "https://weareboard.kr/teosp/v1/card"
+  const { data: cardListFromServer, error } = useFetch<CardFromServer[]>(
+    "https://weareboard.kr/teosp/v1/card"
+  );
+
+  if (cardListFromServer) {
+    const simpleCardList = formatSimpleCardList(cardListFromServer);
+    const simpleHashList = formatSimpleHashList(cardListFromServer);
+
+    return (
+      <MainPageUI
+        simpleCardList={simpleCardList}
+        hashList={simpleHashList}
+      ></MainPageUI>
     );
-
-    if (cardListFromServer) {
-        const simpleCardList = formatSimpleCardList(cardListFromServer);
-        const simpleHashList = formatSimpleHashList(cardListFromServer);
-
-        return (
-            <MainPageUI
-                simpleCardList={simpleCardList}
-                hashList={simpleHashList}
-            ></MainPageUI>
-        );
-    } else if (error) {
-        return <div>!!!!error</div>;
-    }
-    return <div>Loading...</div>;
+  } else if (error) {
+    return <div>!!!!error</div>;
+  }
+  return <div>Loading...</div>;
 };
 
 const IndexSection = styled.div`
@@ -359,15 +367,15 @@ const InfoContainer = styled.ul`
 `;
 
 const Styled = {
-    CardItem,
-    HashtagItem,
-    HashtagItemList,
-    CreateCardButton,
-    SectionLabel,
-    BannerContainer,
-    IndexSection,
-    MainHeader,
-    ContentContainer,
+  CardItem,
+  HashtagItem,
+  HashtagItemList,
+  CreateCardButton,
+  SectionLabel,
+  BannerContainer,
+  IndexSection,
+  MainHeader,
+  ContentContainer,
 };
 
 export default MainPage;
