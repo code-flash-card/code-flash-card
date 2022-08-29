@@ -86,7 +86,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
         <Styled.HashtagItemList>
           {calHashPropsList(hashList).map((hash) => (
             //TODO: hashtags 관련 페이지로 이동 구현
-            <Link to={`/hashtags`} key={hash.id}>
+            <Link to={`/hashtags/${hash.name}`} key={hash.id}>
               <Styled.HashtagItem
                 $backgroundColor={hash.color}
                 key={hash.id}

@@ -10,23 +10,12 @@ export interface Card {
     viewCount: number;
 }
 
-const two = (cards: Card[]) => {
-    const odd = cards.filter((card, i) => i % 2 === 1);
-    const even = cards.filter((card, i) => i % 2 === 0);
-
-    return odd.map((card, i) => [card, even[i]]);
-};
 
 export default function FlashCards({ cards }: { cards: Card[] }) {
     return (
         <Cover>
-            {two(cards).map(([aCard, bCard]) => {
-                return (
-                    <MeddleSection>
-                        <FlashCard key={aCard.cardId} card={aCard} />
-                        <FlashCard key={bCard.cardId} card={bCard} />
-                    </MeddleSection>
-                );
+            {cards.map((aCard) => {
+                return (<FlashCard key={aCard.cardId} card={aCard} />);
             })}
         </Cover>
     );
@@ -35,8 +24,11 @@ const Cover = styled.ul`
     display: flex;
     padding-left: 10px;
     padding-right: 10px;
-    flex-direction: column;
+    flex: 1 1 40%;
+    flex-wrap: wrap;
     gap: 12px;
+    
+   
 `;
 
 const MeddleSection = styled.div`

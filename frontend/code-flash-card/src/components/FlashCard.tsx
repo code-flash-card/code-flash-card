@@ -11,6 +11,7 @@ export default function FlashCard({ card }: { card: Card }) {
     navigate(`/detail/${cardId}`)
   }
     const { explain, viewCount, cardId } = card;
+  console.log('cid',card.cardId)
     return (
         // <Link to={`/detail/${cardId}`}>
             <Styled.CardItem onClick={onClickImg}>

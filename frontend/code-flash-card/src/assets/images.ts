@@ -8,6 +8,7 @@ const images = {
     icon_close: "/assets/images/icon_close.svg",
     icon_back: "/assets/images/icon_arrow_left.svg",
     banner: "/assets/images/banner.svg",
+    congratuation: "/assets/images/congratuation.svg",
 };
 
 export default images;
