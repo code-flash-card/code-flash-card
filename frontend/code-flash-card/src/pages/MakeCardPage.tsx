@@ -38,8 +38,8 @@ const calculateSummitState = (
   state: UIState
 ): "enableSubmit" | "disableSubmit" => {
   return state.backwardInput !== "" &&
-    state.forwardInput !== "" &&
-    state.hashtagInputValue !== ""
+  state.forwardInput !== "" &&
+  state.hashtagInputValue !== ""
     ? "enableSubmit"
     : "disableSubmit";
 };
@@ -128,7 +128,7 @@ interface CardFromServer {
 
 
 /** 카드 컴포넌트 */
-const MakeCard = () => {
+const MakeCardPage = () => {
   const [cardInfo, dispatch] = useReducer(makeCardReducer, {
     hashtagInputValue: "",
     forwardInput: "",
@@ -372,4 +372,4 @@ const Styled = {
   SubmitButton,
 };
 
-export default MakeCard;
+export default MakeCardPage;
