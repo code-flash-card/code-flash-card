@@ -122,7 +122,7 @@ export default function CardDetailPage() {
                     )}
                     <Styled.BtnContainer>
                         <Styled.Button onClick={onClickBefore} disabled={isFirst(currentIndex(filteredCardListByHashName,cardId??""))}>이전 문제</Styled.Button>
-                        <Button onClick={onClickAfter}>{isLast(currentIndex(filteredCardListByHashName,cardId??''),filteredCardListByHashName)?'다음 문제':'완료 하기'}</Button>
+                        <Button onClick={onClickAfter}>{isLast(currentIndex(filteredCardListByHashName,cardId??''),filteredCardListByHashName)?'완료 하기':'다음 문제'}</Button>
                     </Styled.BtnContainer>
 
                 </CardDetailContainer>
