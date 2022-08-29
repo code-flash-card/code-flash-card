@@ -203,8 +203,8 @@ const MakeCard = () => {
               onChange={(e) => {
                 const value = e.target.value;
                 let slicedValue;
-                if (value.length > 15) {
-                  slicedValue = value.substring(0, 15)
+                if (value.length > 150) {
+                  slicedValue = value.substring(0, 150)
                   console.log(slicedValue, value);
                 }
                 dispatch({ type: "INPUT_BACKWARD", value: slicedValue ?? undefined });
