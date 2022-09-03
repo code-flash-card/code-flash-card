@@ -3,7 +3,7 @@ import {CardFromServer} from "../types";
 const URL = `https://weareboard.kr/teosp/v1/card`
 
 
-const asyncAddView = async ({id}: { id: string }) => {
+const asyncAddView = async ({id}: { id: string }): Promise<void> => {
   try {
     const res = await fetch(`${URL}/${id}/view`, {
       method: "PUT",
@@ -49,26 +49,26 @@ const makeCard = async (formData: MakeCardFormData): Promise<MakeCardResult> => 
       const data = await res.json() as CardFromServer
 
       return {
-        result:'success',
+        result: 'success',
         data
       }
     } else {
       return {
-        result:'fail',
-        message:'카드 생성에 실패했습니다.'
+        result: 'fail',
+        message: '카드 생성에 실패했습니다.'
       }
     }
   } catch (e) {
     return {
-      result:'fail',
-      message:'알 수 없는 문제가 발생했습니다.'
+      result: 'fail',
+      message: '알 수 없는 문제가 발생했습니다.'
     }
   }
 }
 const cardApi = {
   addView: asyncAddView,
   URL: URL,
-  create:makeCard
+  create: makeCard
 }
 
 export default cardApi
