@@ -370,7 +370,7 @@ const SubmitButton = styled.button`
   border: 0;
   border-radius: 16px;
   background-color: ${(props) => (props.disabled ? "#A8A8A8" : "#3680FF")};
-  pointer: cursor;
+  cursor: pointer;
 `;
 
 const Styled = {
