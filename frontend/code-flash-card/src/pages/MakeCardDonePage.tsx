@@ -1,9 +1,8 @@
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import React from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { ActivativeButton } from "../components/ActivativeButton";
-import { OverayPageLayout } from "../components/OverayPageLayout";
+import { OverlayPageLayout } from "../components/OverlayPageLayout";
 import images from "../assets/images";
 
 const MainSection = styled.main`
@@ -49,9 +48,9 @@ const MakeCardDonePage = () => {
         return <div>error page</div>;
     }
     return (
-        <OverayPageLayout>
+        <OverlayPageLayout>
             <Styled.MainSection>
-                <img src={images.checked} />
+                <img src={images.checked} alt={'확인 아이콘'}/>
                 <Styled.Between />
                 <Styled.Text>카드를 만들었어요!</Styled.Text>
                 <Styled.Text>만들어진 카드를 확인해보세요.</Styled.Text>
@@ -61,7 +60,7 @@ const MakeCardDonePage = () => {
                     </ActivativeButton>
                 </Styled.ButtonSection>
             </Styled.MainSection>
-        </OverayPageLayout>
+        </OverlayPageLayout>
     );
 };
 
