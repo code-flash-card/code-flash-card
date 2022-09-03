@@ -120,7 +120,7 @@ const isShowModalEnabled = (state: UIState): boolean => {
 
 const FORWARD_MAX_LENGTH = 30;
 const BACKWARD_MAX_LENGTH = 150;
-
+const MIN_WIDTH_PX = 166;
 interface HashTagFromServer {
   cardHashtagId: number;
   name: string;
@@ -196,7 +196,7 @@ const MakeCardPage = () => {
         <Styled.MakeCardForm onSubmit={onSubmit}>
           <Styled.InputContainer>
             <p>카테고리</p>
-            <div>
+            <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
 
               <input
                 type="text"
@@ -237,7 +237,7 @@ const MakeCardPage = () => {
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>뒷면(답)</p>
-            <div style={{position: 'relative'}}>
+            <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
 
               <textarea
                 maxLength={BACKWARD_MAX_LENGTH}
@@ -261,6 +261,7 @@ const MakeCardPage = () => {
 
             </div>
           </Styled.InputContainer>
+          <Styled.EmptyGrow/>
           <Styled.SubmitButton
             type="submit"
             disabled={cardInfo.summitState === "disableSubmit" || submitState === 'onSubmitting'}
@@ -274,6 +275,9 @@ const MakeCardPage = () => {
   );
 };
 
+const EmptyGrow = styled.div`
+flex-grow: 1;
+`
 const MakeCardContainer = styled.div`
   background-color: #272727;
   height: 100vh;
@@ -309,14 +313,17 @@ const MakeCardHeader = styled.div`
 `;
 
 const MakeCardForm = styled.form`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 24px;
   width: calc(100% - 32px);
   margin: 24px 16px;
 `;
 
 const InputContainer = styled.div`
-  margin-bottom: 24px;
-
   p {
+
     color: #fcfcfc;
     font-size: 16px;
     font-weight: 600;
@@ -324,7 +331,9 @@ const InputContainer = styled.div`
   }
 
   input {
-    width: calc(100% - 24px);
+    flex-grow: 1;
+    display: flex;
+    min-width: ${MIN_WIDTH_PX}px;
     padding: 14px 12px;
     font-size: 16px;
     background-color: #3d3d3d;
@@ -338,7 +347,8 @@ const InputContainer = styled.div`
   }
 
   textarea {
-    width: calc(100% - 24px);
+    flex-grow: 1;
+    min-width: ${MIN_WIDTH_PX}px;
     height: 154px;
     padding: 14px 12px;
     font-size: 16px;
@@ -360,16 +370,20 @@ const InputContainer = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  width: calc(100% - 32px);
+  width: 100%;
+  position: relative;
   padding: 16px 24px;
-  position: fixed;
-  bottom: 24px;
   font-size: 20px;
   font-weight: 600;
   color: #fff;
-  border: 0;
+  border: 0;    
+  min-width: ${MIN_WIDTH_PX}px;
+
   border-radius: 16px;
-  background-color: ${(props) => (props.disabled ? "#A8A8A8" : "#3680FF")};
+  background-color: #3680FF;
+  :disabled {
+    background-color: #A8A8A8;
+  }
   cursor: pointer;
 `;
 
@@ -379,6 +393,7 @@ const Styled = {
   MakeCardForm,
   InputContainer,
   SubmitButton,
+  EmptyGrow
 };
 
 export default MakeCardPage;
