@@ -4,22 +4,16 @@ import {useNavigate} from "react-router-dom";
 import SimpleCloseBtn from "../components/SimpleCloseBtn";
 import {AskingStopMakingCardModal} from "../components/AskingStopMakingCardModal";
 import "../reset.css";
+import {cardApi} from "../apis";
+import {MakeCardFormData} from "../apis/cardApi";
 
-/**
- * 스웨거 바탕으로 정의한 formData 스키마
- */
-type SubmitForm = {
-  answer: string;
-  explain: string;
-  hashtags: [string];
-};
 
 interface EnableSubmitState {
   summitState: "enableSubmit";
   hashtagInputValue: string;
   forwardInput: string;
   backwardInput: string;
-  form: SubmitForm;
+  form: MakeCardFormData;
 }
 
 interface DisableSubmitState {
@@ -50,7 +44,7 @@ const calculateSummitState = (
  * hasTages는 현재 1개만 받는 튜플이지만 앞으로 2개이상 받는 리스트가 될 수 도있음
  * @todo: 조금 더 안전하게 조작할 수 있는 로직으로 개선 필요.
  */
-const calculateForm = (state: EnableSubmitState): SubmitForm => {
+const calculateForm = (state: EnableSubmitState): MakeCardFormData => {
   return {
     answer: state.backwardInput,
     explain: state.forwardInput,
@@ -121,19 +115,6 @@ const isShowModalEnabled = (state: UIState): boolean => {
 const FORWARD_MAX_LENGTH = 30;
 const BACKWARD_MAX_LENGTH = 150;
 const MIN_WIDTH_PX = 166;
-interface HashTagFromServer {
-  cardHashtagId: number;
-  name: string;
-}
-
-interface CardFromServer {
-  cardId: number;
-  explain: string;
-  answer: string;
-  viewCount: number;
-  hashtags: HashTagFromServer[];
-}
-
 
 /** 카드 컴포넌트 */
 const MakeCardPage = () => {
@@ -152,28 +133,20 @@ const MakeCardPage = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // story or side effect start
+    if (cardInfo.summitState !== 'enableSubmit') return
     setSubmitState('onSubmitting')
-    if (cardInfo.summitState === 'enableSubmit') {
-      try {
-        const res = await fetch("https://weareboard.kr/teosp/v1/card", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(cardInfo.form)
-        })
-        if (res.ok) {
-          const data = await res.json() as CardFromServer
-          navigation(`/makecard/${data.cardId}/done`)
-        } else {
-          alert('카드 생성에 실패했습니다.')
-        }
-      } catch (e) {
-        alert('알 수 없는 문제가 발생했습니다.')
-      }
-      setSubmitState('idle')
+    const response = await cardApi.create(cardInfo.form)
+    if (response.result === 'success') {
+      navigation(`/makecard/${response.data.cardId}/done`)
+    } else {
+      alert(response.message)
     }
+    setSubmitState('idle')
   }
+  // story or side effect end
+
   return (
     <>
       <Styled.MakeCardContainer>
@@ -276,7 +249,7 @@ const MakeCardPage = () => {
 };
 
 const EmptyGrow = styled.div`
-flex-grow: 1;
+  flex-grow: 1;
 `
 const MakeCardContainer = styled.div`
   background-color: #272727;
@@ -376,14 +349,16 @@ const SubmitButton = styled.button`
   font-size: 20px;
   font-weight: 600;
   color: #fff;
-  border: 0;    
+  border: 0;
   min-width: ${MIN_WIDTH_PX}px;
 
   border-radius: 16px;
   background-color: #3680FF;
+
   :disabled {
     background-color: #A8A8A8;
   }
+
   cursor: pointer;
 `;
 

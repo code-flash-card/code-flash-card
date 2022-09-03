@@ -5,6 +5,7 @@ import "../reset.css";
 import {textToColor} from "../utils";
 import React from "react";
 import images from "../assets/images";
+import {cardApi} from "../apis";
 
 interface Banner {
   id: string;
@@ -221,7 +222,7 @@ const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
 
 const CardListGroup = () => {
   const {data: cardListFromServer, error} = useFetch<CardFromServer[]>(
-    "https://weareboard.kr/teosp/v1/card"
+    cardApi.URL
   );
 
   if (!cardListFromServer) {
