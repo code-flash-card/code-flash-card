@@ -9,7 +9,7 @@ const images = {
     icon_close: "/flashcard/assets/images/icon_close.svg",
     icon_back: "/flashcard/assets/images/icon_arrow_left.svg",
     banner: "/flashcard/assets/images/banner.svg",
-    congratuation: "/flashcard/assets/images/congratuation.svg",
+    congratulation: "/flashcard/assets/images/congratuation.svg",
 };
 
 export default images;

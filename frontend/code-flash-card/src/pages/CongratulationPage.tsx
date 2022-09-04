@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import images from '../assets/images';
-import { OverayPageLayout } from '../components/OverayPageLayout';
+import { OverlayPageLayout } from '../components/OverlayPageLayout';
 
 const MainSection = styled.main`
     display: flex;
@@ -40,20 +40,19 @@ const Styled = {
 };
 
 
-const CongraturationPage = () => {
-  const nav = useNavigate();
+const CongratulationPage = () => {
   const {hasName} = useParams()
   return (
-    <OverayPageLayout>
+    <OverlayPageLayout>
     <Styled.MainSection>
-      <img src={images.congratuation} />
+      <img src={images.congratulation}  alt={'축하이미지'}/>
       <Styled.Between />
       <Styled.Text>축하합니다!</Styled.Text>
       <Styled.Text>{hasName} 카드를 </Styled.Text>
       <Styled.Text>모두 학습했어요!</Styled.Text>
     </Styled.MainSection>
-    </OverayPageLayout>
+    </OverlayPageLayout>
   );
 };
 
-export default CongraturationPage;
+export default CongratulationPage;

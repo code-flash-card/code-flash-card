@@ -2,18 +2,18 @@ import React from "react";
 
 import { useFetch } from "../hooks";
 
-import FlashCards, { Card } from "../components/FlashCards";
+import FlashCards from "../components/FlashCards";
 import FlashCardsNav from "../components/FlashCardsNav";
 import FlashCardsTitle from "../components/FlashCardsTitle";
 import styled from "@emotion/styled";
 import { useParams } from "react-router-dom";
 import { CardFromServer } from "../types";
+import {cardApi} from "../apis";
 
-const url = `https://weareboard.kr/teosp/v1/card`;
 
 export default function HashTagListPage() {
   const { hashName } = useParams()
-  const { data, error } = useFetch<CardFromServer[]>(url);
+  const { data, error } = useFetch<CardFromServer[]>(cardApi.URL);
   if (data) {
     const cards =
       data.filter(card => card.hashtags[0].name === hashName).map((card) => {
