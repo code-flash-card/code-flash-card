@@ -1,38 +1,34 @@
 import styled from "@emotion/styled";
-import { useReducer, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useReducer, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import SimpleCloseBtn from "../components/SimpleCloseBtn";
-import { AskingStopMakingCardModal } from "../components/AskingStopMakingCardModal";
+import {AskingStopMakingCardModal} from "../components/AskingStopMakingCardModal";
 import "../reset.css";
+import {cardApi} from "../apis";
+import {MakeCardFormData} from "../apis/cardApi";
 
-/**
- * 스웨거 바탕으로 정의한 formData 스키마
- */
-type SubmitForm = {
-  answer: string | undefined;
-  explain: string | undefined;
-  hashtags: [string];
-};
-interface enableSubmitState {
+
+interface EnableSubmitState {
   summitState: "enableSubmit";
   hashtagInputValue: string;
-  forwardInput: string | undefined;
-  backwardInput: string | undefined;
-  form: SubmitForm;
+  forwardInput: string;
+  backwardInput: string;
+  form: MakeCardFormData;
 }
-interface disableSubmitState {
+
+interface DisableSubmitState {
   summitState: "disableSubmit";
-  hashtagInputValue: string;
+  hashtagInputValue: string | undefined;
   forwardInput: string | undefined;
   backwardInput: string | undefined;
 }
 
-type UIState = disableSubmitState | enableSubmitState;
+type UIState = DisableSubmitState | EnableSubmitState;
 
 type Action =
   | { type: "INPUT_CATEGORY"; value: string }
-  | { type: "INPUT_FORWARD"; value: string | undefined }
-  | { type: "INPUT_BACKWARD"; value: string | undefined };
+  | { type: "INPUT_FORWARD"; value: string }
+  | { type: "INPUT_BACKWARD"; value: string };
 
 const calculateSummitState = (
   state: UIState
@@ -48,7 +44,7 @@ const calculateSummitState = (
  * hasTages는 현재 1개만 받는 튜플이지만 앞으로 2개이상 받는 리스트가 될 수 도있음
  * @todo: 조금 더 안전하게 조작할 수 있는 로직으로 개선 필요.
  */
-const calculateForm = (state: UIState): SubmitForm => {
+const calculateForm = (state: EnableSubmitState): MakeCardFormData => {
   return {
     answer: state.backwardInput,
     explain: state.forwardInput,
@@ -56,23 +52,28 @@ const calculateForm = (state: UIState): SubmitForm => {
   };
 };
 
+
+const isDisabledSubmitState = (state: UIState): state is DisableSubmitState => calculateSummitState(state) === "disableSubmit"
+const isEnabledSubmitState = (state: UIState): state is EnableSubmitState => calculateSummitState(state) === "enableSubmit"
 /**
  * newState는 action타입과 value로 새롭게 생성된 상태를 뜻함
  *
  */
 const calculateByNewState = (newState: UIState): UIState => {
-  if (calculateSummitState(newState) === "disableSubmit") {
+  if (isDisabledSubmitState(newState)) {
     return {
       ...newState,
       summitState: "disableSubmit",
     };
   }
-
-  return {
-    ...newState,
-    summitState: "enableSubmit",
-    form: calculateForm(newState),
-  };
+  if (isEnabledSubmitState(newState)) {
+    return {
+      ...newState,
+      summitState: "enableSubmit",
+      form: calculateForm(newState),
+    };
+  }
+  throw new Error('기대하지 않은 상태입니다.')
 };
 
 const makeCardReducer = (state: UIState, action: Action): UIState => {
@@ -113,19 +114,7 @@ const isShowModalEnabled = (state: UIState): boolean => {
 
 const FORWARD_MAX_LENGTH = 30;
 const BACKWARD_MAX_LENGTH = 150;
-
-interface HashTagFromServer {
-  cardHashtagId: number;
-  name: string;
-}
-interface CardFromServer {
-  cardId: number;
-  explain: string;
-  answer: string;
-  viewCount: number;
-  hashtags: HashTagFromServer[];
-}
-
+const MIN_WIDTH_PX = 166;
 
 /** 카드 컴포넌트 */
 const MakeCardPage = () => {
@@ -144,28 +133,20 @@ const MakeCardPage = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // story or side effect start
+    if (cardInfo.summitState !== 'enableSubmit') return
     setSubmitState('onSubmitting')
-    if (cardInfo.summitState === 'enableSubmit') {
-      try {
-        const res = await fetch("https://weareboard.kr/teosp/v1/card", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(cardInfo.form)
-        })
-        if (res.ok) {
-          const data = await res.json() as CardFromServer
-          navigation(`/makecard/${data.cardId}/done`)
-        } else {
-          alert('카드 생성에 실패했습니다.')
-        }
-      } catch (e) {
-        alert('알 수 없는 문제가 발생했습니다.')
-      }
-      setSubmitState('idle')
+    const response = await cardApi.create(cardInfo.form)
+    if (response.result === 'success') {
+      navigation(`/makecard/${response.data.cardId}/done`)
+    } else {
+      alert(response.message)
     }
+    setSubmitState('idle')
   }
+  // story or side effect end
+
   return (
     <>
       <Styled.MakeCardContainer>
@@ -179,16 +160,16 @@ const MakeCardPage = () => {
                 navigation("/");
               }
             }}
-            style={{ position: "absolute", left: 5, color: "wheat" }}
+            style={{position: "absolute", left: 5, color: "wheat"}}
           >
-            <SimpleCloseBtn />
+            <SimpleCloseBtn/>
           </div>
           <p>카드 만들기</p>
         </Styled.MakeCardHeader>
         <Styled.MakeCardForm onSubmit={onSubmit}>
           <Styled.InputContainer>
             <p>카테고리</p>
-            <div>
+            <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
 
               <input
                 type="text"
@@ -196,7 +177,7 @@ const MakeCardPage = () => {
                 value={cardInfo.hashtagInputValue}
                 onChange={(e) => {
                   const value = e.target.value;
-                  dispatch({ type: "INPUT_CATEGORY", value });
+                  dispatch({type: "INPUT_CATEGORY", value});
                 }}
                 placeholder="만드실 카드의 카테고리를 입력해주세요."
               />
@@ -204,7 +185,7 @@ const MakeCardPage = () => {
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>앞면(문제)</p>
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
               <input
                 type="text"
                 value={cardInfo.forwardInput}
@@ -215,7 +196,7 @@ const MakeCardPage = () => {
                     return
                   }
 
-                  dispatch({ type: "INPUT_FORWARD", value: value });
+                  dispatch({type: "INPUT_FORWARD", value: value});
                 }}
                 placeholder="만드실 카드의 앞면(문제)을 채워주세요."
               />
@@ -229,7 +210,7 @@ const MakeCardPage = () => {
           </Styled.InputContainer>
           <Styled.InputContainer>
             <p>뒷면(답)</p>
-            <div style={{ position: 'relative' }}>
+            <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
 
               <textarea
                 maxLength={BACKWARD_MAX_LENGTH}
@@ -239,7 +220,7 @@ const MakeCardPage = () => {
                   if (value.length > BACKWARD_MAX_LENGTH) {
                     return
                   }
-                  dispatch({ type: "INPUT_BACKWARD", value: value });
+                  dispatch({type: "INPUT_BACKWARD", value: value});
                 }}
                 placeholder="만드실 카드의 뒷면(답)을 채워주세요."
               />
@@ -253,6 +234,7 @@ const MakeCardPage = () => {
 
             </div>
           </Styled.InputContainer>
+          <Styled.EmptyGrow/>
           <Styled.SubmitButton
             type="submit"
             disabled={cardInfo.summitState === "disableSubmit" || submitState === 'onSubmitting'}
@@ -261,11 +243,14 @@ const MakeCardPage = () => {
           </Styled.SubmitButton>
         </Styled.MakeCardForm>
       </Styled.MakeCardContainer>
-      {isShowModal && <AskingStopMakingCardModal hideModal={hideModal} />}
+      {isShowModal && <AskingStopMakingCardModal hideModal={hideModal}/>}
     </>
   );
 };
 
+const EmptyGrow = styled.div`
+  flex-grow: 1;
+`
 const MakeCardContainer = styled.div`
   background-color: #272727;
   height: 100vh;
@@ -301,14 +286,17 @@ const MakeCardHeader = styled.div`
 `;
 
 const MakeCardForm = styled.form`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 24px;
   width: calc(100% - 32px);
   margin: 24px 16px;
 `;
 
 const InputContainer = styled.div`
-  margin-bottom: 24px;
-
   p {
+
     color: #fcfcfc;
     font-size: 16px;
     font-weight: 600;
@@ -316,20 +304,24 @@ const InputContainer = styled.div`
   }
 
   input {
-    width: calc(100% - 24px);
+    flex-grow: 1;
+    display: flex;
+    min-width: ${MIN_WIDTH_PX}px;
     padding: 14px 12px;
     font-size: 16px;
     background-color: #3d3d3d;
     border: 0;
     border-radius: 12px;
-    color:#fcfcfc;
+    color: #fcfcfc;
+
     :focus {
       outline: none;
     }
   }
 
   textarea {
-    width: calc(100% - 24px);
+    flex-grow: 1;
+    min-width: ${MIN_WIDTH_PX}px;
     height: 154px;
     padding: 14px 12px;
     font-size: 16px;
@@ -338,7 +330,7 @@ const InputContainer = styled.div`
     border: 0;
     border-radius: 12px;
     resize: none;
-    color:#fcfcfc;
+    color: #fcfcfc;
 
     :focus {
       outline: none;
@@ -351,17 +343,23 @@ const InputContainer = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  width: calc(100% - 32px);
+  width: 100%;
+  position: relative;
   padding: 16px 24px;
-  position: fixed;
-  bottom: 24px;
   font-size: 20px;
   font-weight: 600;
   color: #fff;
   border: 0;
+  min-width: ${MIN_WIDTH_PX}px;
+
   border-radius: 16px;
-  background-color: ${(props) => (props.disabled ? "#A8A8A8" : "#3680FF")};
-  pointer: cursor;
+  background-color: #3680FF;
+
+  :disabled {
+    background-color: #A8A8A8;
+  }
+
+  cursor: pointer;
 `;
 
 const Styled = {
@@ -370,6 +368,7 @@ const Styled = {
   MakeCardForm,
   InputContainer,
   SubmitButton,
+  EmptyGrow
 };
 
 export default MakeCardPage;

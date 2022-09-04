@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 const PADDING = '3vh'
 const FOOTER_HEIGHT = `15vh`
 const MAIN_SECTION_HEIGHT = css`calc(calc(100vh - ${FOOTER_HEIGHT}) - calc(${PADDING} + ${PADDING}))`
-const OverayPageLayoutWapper = styled.div`
+const OverlayPageLayoutWrapper = styled.div`
   background: #1E1E1E;
   
   padding: ${PADDING};
@@ -25,9 +25,9 @@ const MainSection = styled.section`
 height: ${MAIN_SECTION_HEIGHT};
 `
 
-export const OverayPageLayout = ({children}:{children:React.ReactNode})=>{
+export const OverlayPageLayout = ({children}:{children:React.ReactNode})=>{
   return (
-    <OverayPageLayoutWapper>
+    <OverlayPageLayoutWrapper>
       <MainSection>
         {children}
       </MainSection>
@@ -36,6 +36,6 @@ export const OverayPageLayout = ({children}:{children:React.ReactNode})=>{
         메인으로 돌아가기
       </Footer>
         </Link>
-    </OverayPageLayoutWapper>
+    </OverlayPageLayoutWrapper>
   )
 }

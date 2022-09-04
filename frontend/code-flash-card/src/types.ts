@@ -1,4 +1,4 @@
-interface HashTagFromServer {
+export interface HashTagFromServer {
   cardHashtagId: number;
   name: string;
 }
