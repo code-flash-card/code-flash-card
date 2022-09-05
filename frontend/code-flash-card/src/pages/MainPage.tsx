@@ -245,22 +245,38 @@ const CardListGroup = () => {
 
 const MainPage = () => {
 
+  const isUserLogin = sessionStorage.length > 0 || localStorage.length > 0;
+
   return (
     <Styled.IndexSection>
       <Styled.MainHeader>
         <Link to="/">
           <img src={images.logo_flip}/>
         </Link>
-        <a href="https://github.com/code-flash-card/code-flash-card">
-          <img src={images.icon_github}/>
-        </a>
+        <div>
+          {isUserLogin ? 
+             (
+              <Styled.ProfileContainer>
+                  <Link to="/profile">
+                    <img src={images.icon_profile}/>
+                  </Link>
+                </Styled.ProfileContainer>
+              ) : (
+                <Styled.SignInContainer>
+                  <Link to="/signin">
+                    <p>시작하기</p>
+                  </Link>
+                </Styled.SignInContainer>
+              )
+          }
+        </div>
       </Styled.MainHeader>
       <Styled.ContentContainer>
-        <Link to="/">
+        <a href="https://github.com/code-flash-card/code-flash-card">
           <Styled.BannerContainer>
             <img src={images.banner}/>
           </Styled.BannerContainer>
-        </Link>
+        </a>
         <CardListGroup/>
         <Styled.CreateCardButton type="button">
           <Link to="/makecard">
@@ -291,7 +307,21 @@ const MainHeader = styled.div`
   justify-content: space-between;
   padding: 16px;
   margin-bottom: 16px;
+  align-items: center;
 `;
+
+const ProfileContainer = styled.div`
+  width: 24px;
+  height: 24px;
+`
+
+const SignInContainer = styled.div`
+  p {
+    color: #3680FF;
+    font-size: 16px;
+    font-weight: 600;
+  }
+`
 
 const ContentContainer = styled.div`
   margin: 0 16px;
@@ -399,6 +429,8 @@ const Styled = {
   IndexSection,
   MainHeader,
   ContentContainer,
+  ProfileContainer,
+  SignInContainer
 };
 
 export default MainPage;
