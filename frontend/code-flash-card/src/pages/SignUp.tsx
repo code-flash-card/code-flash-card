@@ -1,98 +1,12 @@
-import React, { useReducer, useState } from "react";
+import React, { useCallback, useReducer, useState } from "react";
 import styled from "@emotion/styled";
 import SimpleCloseBtn from "../components/SimpleCloseBtn";
 import { Link, useNavigate } from "react-router-dom";
 
-const RegEx = "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$";
-
-//TODO useReducer + ts로 리팩토링 필요
-// type SignUpData = {
-//   username: string;
-//   password: string;
-// }
-
-// interface EnableSignUp {
-//   isEnable: "enableSignUp";
-//   userId: string;
-//   userPw: string;
-//   checkPw: string;
-//   form: SignUpData;
-// }
-
-// interface DisableSignUp {
-//   isEnable: "disableSignUp";
-//   userId: string | undefined;
-//   userPw: string | undefined;
-//   checkPw: string | undefined;
-// }
-
-// type SignUpState = EnableSignUp | DisableSignUp
-
-// type Action = 
-//   | {type: "INPUT_ID"; value: string} 
-//   | {type: "INPUT_PW"; value: string} 
-//   | {type: "CHECK_PW"; value: string};
-
-// /** SignUpState 조건에 따른 boolean값 검사 */
-// const calcSignUpState = (state: SignUpState): 'enableSignUp' | 'disableSignUp' => {
-//   return state.userId !== "" 
-//     && state.userPw !== "" 
-//     && state.checkPw === state.userPw 
-//     ? 'enableSignUp' : 'disableSignUp';
-// }
-
-// /** front와 back의 데이터 싱크 */
-// const calcSignUpForm = (state:EnableSignUp):SignUpData => {
-//   return {
-//     username: state.userId,
-//     password: state.userPw
-//   }
-// }
-
-
-// const isDisabledSignUpState = (state:SignUpState): state is DisableSignUp => 
-//   calcSignUpState(state) === 'disableSignUp';
-// const isEnabledSignUpState = (state:SignUpState): state is EnableSignUp => 
-//   calcSignUpState(state) === 'enableSignUp';
-
-// const calcByNewState = (newState: SignUpState): SignUpState => {
-//   if(isDisabledSignUpState(newState)) {
-//     return {
-//       ...newState,
-//       isEnable: "disableSignUp"
-//     }
-//   }
-//   if(isEnabledSignUpState(newState)) {
-//     return {
-//       ...newState,
-//       isEnable: 'enableSignUp'
-//     }
-//   }
-//   throw new Error("[Error]calcByNewState");
-// }
-
-// const signUpReducer = (state: SignUpState, action: Action): SignUpState => {
-//   switch(action.type) {
-//     case "INPUT_ID": {
-//       const newState = {
-//         ...state,
-//         userId: action.value,
-//       }
-//       return calcByNewState(newState);
-//     }
-//     case "INPUT_PW": {
-//       const newState = {
-//         ...state,
-//         userPw: action.value,
-//       }
-//       return calcByNewState(newState);
-//     }
-//     default:
-//       throw new Error("[Error] signUpReducer");
-//   }
-// }
+const RegEx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 const SignUp = () => {
+  // 유저 정보
   const [signUpInfo, setSignUpInfo] = useState({
     userId: '',
     userPw: '',
@@ -107,9 +21,7 @@ const SignUp = () => {
     })
   }
 
-  const {userId, userPw, checkPw} = signUpInfo;
-
-  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = useCallback((e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     fetch('https://weareboard.kr/teosp/join', {
@@ -131,35 +43,17 @@ const SignUp = () => {
       }
       navigate('/')
     })
-  }
+  }, [signUpInfo]);
+
   const navigate = useNavigate();
 
-  const isValid = !(signUpInfo.userId.length >= 8 && signUpInfo.userPw.length >= 8 && signUpInfo.userPw === signUpInfo.checkPw);
-  
-  // const [signUpInfo, setSignUpInfo] = useReducer(signUpReducer, {
-  //   userId: '',
-  //   userPw: '',
-  //   checkPw: '',
-  //   isEnable: 'disableSignUp'
-  // })
-
-  // const [submitState, setSubmitState] = useState<"idle" | "onSubmitting">("idle");
-
-
-  // const onSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   if (signUpInfo.isEnable !== 'enableSignUp') return;
-  //   setSubmitState("onSubmitting");
-  //   const response = await signUpApi.create(signUpInfo.form);
-  //   if (response.result === 'success') {
-  //     // navigate(`/`)
-  //     alert("회원가입이 완료되었습니다.")
-  //   } else {
-  //     alert("회원가입에 실패했습니다.")
-  //   }
-  // }
-
+  const isValid =
+    !(signUpInfo.userId.length >= 8 && 
+      signUpInfo.userPw.length >= 8 && 
+      signUpInfo.userPw === signUpInfo.checkPw &&
+      RegEx.test(signUpInfo.userPw) === true
+      );
+      
   return (
     <Styled.SignUpContainer>
       
@@ -176,7 +70,7 @@ const SignUp = () => {
               type="text" 
               name='userId'
               onChange={handleInput}
-              placeholder="최소 8자 이상" />
+              placeholder="최소 8자 이상으로 입력해주세요" />
           </Styled.InputWrapper>
           <Styled.InputWrapper>
             <p>비밀번호</p>
@@ -184,7 +78,7 @@ const SignUp = () => {
               type="text" 
               name='userPw'
               onChange={handleInput}
-              placeholder="영문, 숫자를 조합한 8자 이상" />
+              placeholder="영문, 숫자를 조합한 8자 이상으로 입력해주세요" />
           </Styled.InputWrapper>
           <Styled.InputWrapper>
             <p>비밀번호 확인</p>
