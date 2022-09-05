@@ -162,7 +162,7 @@ const SignUp = () => {
 
   return (
     <Styled.SignUpContainer>
-      <div>
+      
         <Styled.PageHeader>
           <Link to="/">
             <SimpleCloseBtn />
@@ -194,9 +194,12 @@ const SignUp = () => {
               onChange={handleInput}
               placeholder="비밀번호를 한 번 더 입력해주세요" />
           </Styled.InputWrapper>
-      <Styled.SignBtn type="submit" disabled={isValid}>회원가입</Styled.SignBtn>
+          <Styled.SignBtn type="submit" disabled={isValid}>회원가입</Styled.SignBtn>
         </SignForm>
-      </div>
+        <LoginNotifyContainer>
+          <span>이미 가입하셨나요?</span>
+          <Link to='/signin'>로그인</Link>
+        </LoginNotifyContainer>
     </Styled.SignUpContainer>
   );
 };
@@ -207,7 +210,7 @@ const SignUpContainer = styled.div`
   padding: 0 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
 `;
 
 const PageHeader = styled.div`
@@ -274,6 +277,21 @@ const SignBtn = styled.button`
   cursor: pointer;
 `;
 
+const LoginNotifyContainer = styled.div`
+  text-align: center;
+  margin-top: 24px;
+  font-size: 13px;
+
+  span {
+    color: #A8A8A8;
+    margin-right: 4px;
+  }
+
+  a {
+    color: #3680FF;
+  }
+`
+
 const Styled = {
   SignUpContainer,
   PageHeader,
@@ -281,6 +299,7 @@ const Styled = {
   SignForm,
   InputWrapper,
   SignBtn,
+  LoginNotifyContainer
 };
 
 export default SignUp;
