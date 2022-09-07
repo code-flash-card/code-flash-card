@@ -9,6 +9,8 @@ const images = {
     icon_close: "/flashcard/assets/images/icon_close.svg",
     icon_back: "/flashcard/assets/images/icon_arrow_left.svg",
     icon_profile: "/flashcard/assets/images/icon_profile.svg",
+    icon_eye: "/flashcard/assets/images/icon_eye.svg",
+    icon_eye_off: "/flashcard/assets/images/icon_eye_off.svg",
     banner: "/flashcard/assets/images/banner.svg",
     congratulation: "/flashcard/assets/images/congratuation.svg",
 };

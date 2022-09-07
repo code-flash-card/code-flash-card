@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import styled from '@emotion/styled';
 import SimpleCloseBtn from '../components/SimpleCloseBtn';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import images from '../assets/images';
 
 const SignIn = () => {
   const [signInInfo, setSignInInfo] = useState({
     userId: '',
     userPw: '',
   })
+  const [showPw, setShowPw] = useState(false);
 
   const {userId, userPw} = signInInfo;
 
@@ -21,6 +23,13 @@ const SignIn = () => {
       ...signInInfo,
       [name]: value
     })
+  }
+
+  const toggleShowPw = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
+    setShowPw(prevState => !prevState);
+    console.log(showPw)
   }
 
   const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
@@ -39,14 +48,14 @@ const SignIn = () => {
     .then(res => res.json())
     .then(res => {
       if(res.ok) {
-        localStorage.setItem('accessToken', res.accessToken)
-        localStorage.setItem('refreshToken', res.refreshToken)
+        sessionStorage.setItem('accessToken', res.accessToken)
+        sessionStorage.setItem('refreshToken', res.refreshToken)
+        // console.log(res)
+        alert(`${signInInfo.userId}님, 반가워요!`);
+        navigate('/');
+      } else {
+        alert('회원정보가 일치하지 않습니다. 아이디 또는 비밀번호를 확인해주세요.')
       }
-      sessionStorage.setItem('accessToken', res.accessToken)
-      sessionStorage.setItem('refreshToken', res.refreshToken)
-      // console.log(res)
-      alert(`${signInInfo.userId}님, 반가워요!`);
-      navigate('/');
     })
   }
 
@@ -70,10 +79,21 @@ const SignIn = () => {
         <Styled.InputWrapper>
           <p>비밀번호</p>
           <input 
-            type="password" 
+            type={showPw ? 'text' : 'password'} 
             name='userPw'
             onChange={handleInput}
             placeholder='비밀번호를 입력해주세요' />
+            <Styled.PwShowBtn onClick={toggleShowPw}>
+              {showPw ? (
+                <div>
+                  <img src={images.icon_eye_off}/>
+                </div>
+                ) : (
+                <div>
+                  <img src={images.icon_eye}/>
+                </div>
+              )}
+            </Styled.PwShowBtn>
         </Styled.InputWrapper>
         <Styled.SignBtn type='submit' disabled={isValid}>로그인</Styled.SignBtn>
       </SignForm>
@@ -172,6 +192,20 @@ const SignUpNotifyContainer = styled.div`
   }
 `
 
-const Styled = {SignUpContainer, PageHeader, ContentTitle, SignForm, InputWrapper, SignBtn, SignUpNotifyContainer}
+const PwShowBtn = styled.button`
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  position: absolute;
+  right: 28px;
+  top: 246px;
+
+  div {
+    width: 24px;
+    height: 24px;
+  }
+`
+
+const Styled = {SignUpContainer, PageHeader, ContentTitle, SignForm, InputWrapper, SignBtn, SignUpNotifyContainer, PwShowBtn}
 
 export default SignIn;
