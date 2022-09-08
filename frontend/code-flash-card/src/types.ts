@@ -10,3 +10,8 @@ export interface CardFromServer {
   viewCount: number;
   hashtags: HashTagFromServer[];
 }
+
+export interface UserInfoFromServer {
+  password: string;
+  username: string;
+}

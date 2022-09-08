@@ -6,6 +6,9 @@ import MakeCardDonePage from "./pages/MakeCardDonePage";
 import CardDetailPage from "./pages/CardDetailPage";
 import HashTagListPage from "./pages/HashTagListPage";
 import CongratulationPage from "./pages/CongratulationPage";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import Profile from "./pages/Profile";
 
 function Router() {
   return (
@@ -16,7 +19,10 @@ function Router() {
         <Route path="/makecard/:cardId/done" element={<MakeCardDonePage />} />
         <Route path="/detail/:cardId" element={<CardDetailPage />} />
         <Route path="/hashtags/:hashName" element={<HashTagListPage />} />
-        <Route path="/hashtags/:hashName/congratuation" element={<CongratulationPage />} />
+        <Route path="/hashtags/:hashName/congratuation" element={<CongratulationPage />} />  
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
