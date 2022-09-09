@@ -1,6 +1,5 @@
+import API_URL from "../config";
 import { TokenFromServer, UserInfoFromServer } from "types";
-
-const URL = `https://weareboard.kr/teosp`;
 
 // 회원가입 타입
 export type SignUpFormData = {
@@ -42,7 +41,7 @@ type SignInResult = SignInSuccessType | SignInFailedType;
 
 const signInUser = async (formData: SignInFormData): Promise<SignInResult> => {
   try {
-    const res = await fetch(`${URL}/login`, {
+    const res = await fetch(`${API_URL.signIn}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +72,7 @@ const signInUser = async (formData: SignInFormData): Promise<SignInResult> => {
 
 const signUpUser = async (formData: SignUpFormData): Promise<SignUpResult> => {
   try {
-    const res = await fetch(`${URL}/join`, {
+    const res = await fetch(`${API_URL.signUp}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

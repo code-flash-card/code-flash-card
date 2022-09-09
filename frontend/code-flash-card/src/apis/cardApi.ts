@@ -1,10 +1,9 @@
+import API_URL from "../config";
 import { CardFromServer } from "../types";
-
-const URL = `https://weareboard.kr/teosp/v1/card`;
 
 const asyncAddView = async ({ id }: { id: string }): Promise<void> => {
   try {
-    const res = await fetch(`${URL}/${id}/view`, {
+    const res = await fetch(`${API_URL.card}/${id}/view`, {
       method: "PUT",
     });
     if (res.ok) {
@@ -38,7 +37,7 @@ const makeCard = async (
   formData: MakeCardFormData
 ): Promise<MakeCardResult> => {
   try {
-    const res = await fetch(URL, {
+    const res = await fetch(`${API_URL.card}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
