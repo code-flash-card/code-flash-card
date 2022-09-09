@@ -1,109 +1,114 @@
-import React, {useState} from 'react';
-import styled from '@emotion/styled';
-import SimpleCloseBtn from '../components/SimpleCloseBtn';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import images from '../assets/images';
+import React, { useState } from "react";
+import styled from "@emotion/styled";
+import SimpleCloseBtn from "../components/SimpleCloseBtn";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import images from "../assets/images";
 
 const SignIn = () => {
   const [signInInfo, setSignInInfo] = useState({
-    userId: '',
-    userPw: '',
-  })
-  const [showPw, setShowPw] = useState(false);
+    userId: "",
+    userPw: "",
+  });
 
-  const {userId, userPw} = signInInfo;
+  const [showPw, setShowPw] = useState(false);
 
   const isValid = !(signInInfo.userId !== "" && signInInfo.userPw !== "");
 
   const navigate = useNavigate();
 
-  const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setSignInInfo({
       ...signInInfo,
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
 
-  const toggleShowPw = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const toggleShowPw = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    setShowPw(prevState => !prevState);
-    console.log(showPw)
-  }
+    setShowPw((prevState) => !prevState);
+    console.log(showPw);
+  };
 
-  const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    fetch ('https://weareboard.kr/teosp/login', {
+    fetch("https://weareboard.kr/teosp/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         username: signInInfo.userId,
-        password: signInInfo.userPw
-      })
+        password: signInInfo.userPw,
+      }),
     })
-    .then(res => res.json())
-    .then(res => {
-      if(res.ok) {
-        sessionStorage.setItem('accessToken', res.accessToken)
-        sessionStorage.setItem('refreshToken', res.refreshToken)
-        // console.log(res)
-        alert(`${signInInfo.userId}님, 반가워요!`);
-        navigate('/');
-      } else {
-        alert('회원정보가 일치하지 않습니다. 아이디 또는 비밀번호를 확인해주세요.')
-      }
-    })
-  }
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) {
+          sessionStorage.setItem("accessToken", res.accessToken);
+          sessionStorage.setItem("refreshToken", res.refreshToken);
+          // console.log(res)
+          alert(`${signInInfo.userId}님, 반가워요!`);
+          navigate("/");
+        } else {
+          alert(
+            "회원정보가 일치하지 않습니다. 아이디 또는 비밀번호를 확인해주세요."
+          );
+        }
+      });
+  };
 
   return (
     <Styled.SignUpContainer>
       <Styled.PageHeader>
-        <Link to="/" >
-          <SimpleCloseBtn />  
+        <Link to="/">
+          <SimpleCloseBtn />
         </Link>
       </Styled.PageHeader>
       <SignForm onSubmit={onSubmit}>
         <Styled.ContentTitle>로그인</Styled.ContentTitle>
         <Styled.InputWrapper>
           <p>아이디</p>
-          <input 
-            type="text" 
-            name='userId'
+          <input
+            type="text"
+            name="userId"
             onChange={handleInput}
-            placeholder='아이디를 입력해주세요' />
+            placeholder="아이디를 입력해주세요"
+          />
         </Styled.InputWrapper>
         <Styled.InputWrapper>
           <p>비밀번호</p>
-          <input 
-            type={showPw ? 'text' : 'password'} 
-            name='userPw'
+          <input
+            type={showPw ? "text" : "password"}
+            name="userPw"
             onChange={handleInput}
-            placeholder='비밀번호를 입력해주세요' />
-            <Styled.PwShowBtn onClick={toggleShowPw}>
-              {showPw ? (
-                <div>
-                  <img src={images.icon_eye_off}/>
-                </div>
-                ) : (
-                <div>
-                  <img src={images.icon_eye}/>
-                </div>
-              )}
-            </Styled.PwShowBtn>
+            placeholder="비밀번호를 입력해주세요"
+          />
+          <Styled.PwShowBtn onClick={toggleShowPw}>
+            {showPw ? (
+              <div>
+                <img src={images.icon_eye_off} />
+              </div>
+            ) : (
+              <div>
+                <img src={images.icon_eye} />
+              </div>
+            )}
+          </Styled.PwShowBtn>
         </Styled.InputWrapper>
-        <Styled.SignBtn type='submit' disabled={isValid}>로그인</Styled.SignBtn>
+        <Styled.SignBtn type="submit" disabled={isValid}>
+          로그인
+        </Styled.SignBtn>
       </SignForm>
       <SignUpNotifyContainer>
         <span>계정이 없으신가요?</span>
-        <Link to='/signup'>회원가입</Link>
+        <Link to="/signup">회원가입</Link>
       </SignUpNotifyContainer>
     </Styled.SignUpContainer>
-  )
-}
+  );
+};
 
 const SignUpContainer = styled.div`
   height: 100vh;
@@ -112,12 +117,12 @@ const SignUpContainer = styled.div`
   display: flex;
   flex-direction: column;
   // justify-content: space-between;
-`
+`;
 
 const PageHeader = styled.div`
   padding: 12px 0;
   height: 24px;
-`
+`;
 
 const ContentTitle = styled.p`
   margin-top: 8px;
@@ -125,11 +130,11 @@ const ContentTitle = styled.p`
   font-weight: 600;
   font-size: 28px;
   color: #fcfcfc;
-`
+`;
 
 const SignForm = styled.form`
-width: 100%;
-`
+  width: 100%;
+`;
 
 const InputWrapper = styled.div`
   margin-bottom: 24px;
@@ -156,7 +161,7 @@ const InputWrapper = styled.div`
       outline: none;
     }
   }
-`
+`;
 
 const SignBtn = styled.button`
   width: 100%;
@@ -168,14 +173,14 @@ const SignBtn = styled.button`
   border: 0;
 
   border-radius: 16px;
-  background-color: #3680FF;
+  background-color: #3680ff;
 
   :disabled {
-    background-color: #A8A8A8;
+    background-color: #a8a8a8;
   }
 
   cursor: pointer;
-`
+`;
 
 const SignUpNotifyContainer = styled.div`
   text-align: center;
@@ -183,14 +188,14 @@ const SignUpNotifyContainer = styled.div`
   font-size: 13px;
 
   span {
-    color: #A8A8A8;
+    color: #a8a8a8;
     margin-right: 4px;
   }
 
   a {
-    color: #3680FF;
+    color: #3680ff;
   }
-`
+`;
 
 const PwShowBtn = styled.button`
   background-color: transparent;
@@ -204,8 +209,17 @@ const PwShowBtn = styled.button`
     width: 24px;
     height: 24px;
   }
-`
+`;
 
-const Styled = {SignUpContainer, PageHeader, ContentTitle, SignForm, InputWrapper, SignBtn, SignUpNotifyContainer, PwShowBtn}
+const Styled = {
+  SignUpContainer,
+  PageHeader,
+  ContentTitle,
+  SignForm,
+  InputWrapper,
+  SignBtn,
+  SignUpNotifyContainer,
+  PwShowBtn,
+};
 
 export default SignIn;
