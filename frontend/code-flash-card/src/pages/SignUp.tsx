@@ -15,9 +15,9 @@ interface EnableSignUp {
 
 interface DisableSignUp {
   submitState: "disableSignUp";
-  userId: string | undefined;
-  userPw: string | undefined;
-  checkPw: string | undefined;
+  userId: string;
+  userPw: string;
+  checkPw: string;
 }
 
 type SignUpState = EnableSignUp | DisableSignUp;
@@ -131,7 +131,7 @@ const SignUp = () => {
   };
 
   const isValid = !(
-    userInfo.userId?.length >= 8 &&
+    userInfo.userId.length >= 8 &&
     userInfo.userPw.length >= 8 &&
     userInfo.userPw === userInfo.checkPw &&
     RegEx.test(userInfo.userPw) === true
@@ -182,7 +182,7 @@ const SignUp = () => {
             placeholder="비밀번호를 한 번 더 입력해주세요"
           />
         </Styled.InputWrapper>
-        <Styled.SignBtn type="submit" disabled={!isValid}>
+        <Styled.SignBtn type="submit" disabled={isValid}>
           회원가입
         </Styled.SignBtn>
       </SignForm>
