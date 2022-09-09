@@ -33,6 +33,7 @@ type FailType = {
 };
 
 type MakeCardResult = SuccessType | FailType;
+
 const makeCard = async (
   formData: MakeCardFormData
 ): Promise<MakeCardResult> => {

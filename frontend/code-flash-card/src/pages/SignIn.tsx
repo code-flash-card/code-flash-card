@@ -1,64 +1,126 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import styled from "@emotion/styled";
 import SimpleCloseBtn from "../components/SimpleCloseBtn";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import images from "../assets/images";
+import signApi, { SignInFormData } from "../apis/signApi";
+
+interface EnableSignIn {
+  signInState: "enableSignIn";
+  userId: string;
+  userPw: string;
+  form: SignInFormData;
+}
+
+interface DisableSignIn {
+  signInState: "disableSignIn";
+  userId: string;
+  userPw: string;
+}
+
+type SignInState = EnableSignIn | DisableSignIn;
+
+type Action =
+  | { type: "INPUT_ID"; value: string }
+  | { type: "INPUT_PW"; value: string };
+
+const calcSignInState = (
+  state: SignInState
+): "enableSignIn" | "disableSignIn" => {
+  return state.userId !== "" && state.userPw !== ""
+    ? "enableSignIn"
+    : "disableSignIn";
+};
+
+const calcSignInForm = (state: EnableSignIn): SignInFormData => {
+  return {
+    username: state.userId,
+    password: state.userPw,
+  };
+};
+
+const isDisabledSignInState = (state: SignInState): state is DisableSignIn =>
+  calcSignInState(state) === "disableSignIn";
+const isEnabledSignInState = (state: SignInState): state is EnableSignIn =>
+  calcSignInState(state) === "enableSignIn";
+
+const calcByNewSignInState = (newState: SignInState): SignInState => {
+  if (isDisabledSignInState(newState)) {
+    return {
+      ...newState,
+      signInState: "disableSignIn",
+    };
+  }
+  if (isEnabledSignInState(newState)) {
+    return {
+      ...newState,
+      signInState: "enableSignIn",
+      form: calcSignInForm(newState),
+    };
+  }
+  throw new Error("[ERROR]calcByNewSignInState");
+};
+
+const signInReducer = (state: SignInState, action: Action): SignInState => {
+  switch (action.type) {
+    case "INPUT_ID": {
+      const newState = {
+        ...state,
+        userId: action.value,
+      };
+      return calcByNewSignInState(newState);
+    }
+    case "INPUT_PW": {
+      const newState = {
+        ...state,
+        userPw: action.value,
+      };
+      return calcByNewSignInState(newState);
+    }
+    default:
+      throw new Error("[ERROR]signInReducer");
+  }
+};
 
 const SignIn = () => {
-  const [signInInfo, setSignInInfo] = useState({
+  const [userInfo, dispatch] = useReducer(signInReducer, {
     userId: "",
     userPw: "",
+    signInState: "disableSignIn",
   });
 
-  const [showPw, setShowPw] = useState(false);
-
-  const isValid = !(signInInfo.userId !== "" && signInInfo.userPw !== "");
+  const [submitState, setSubmitState] = useState<"idle" | "onSubmitting">(
+    "idle"
+  );
 
   const navigate = useNavigate();
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSignInInfo({
-      ...signInInfo,
-      [name]: value,
-    });
-  };
+  const [showPw, setShowPw] = useState(false);
 
   const toggleShowPw = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
     setShowPw((prevState) => !prevState);
-    console.log(showPw);
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    fetch("https://weareboard.kr/teosp/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: signInInfo.userId,
-        password: signInInfo.userPw,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.ok) {
-          sessionStorage.setItem("accessToken", res.accessToken);
-          sessionStorage.setItem("refreshToken", res.refreshToken);
-          // console.log(res)
-          alert(`${signInInfo.userId}님, 반가워요!`);
-          navigate("/");
-        } else {
-          alert(
-            "회원정보가 일치하지 않습니다. 아이디 또는 비밀번호를 확인해주세요."
-          );
-        }
-      });
+    if (userInfo.signInState !== "enableSignIn") return;
+    setSubmitState("onSubmitting");
+    const response = await signApi.login(userInfo.form);
+    if (response.result === "success") {
+      sessionStorage.setItem("accessToken", response.data.accessToken);
+      sessionStorage.setItem("refreshToken", response.data.refreshToken);
+      alert(`안녕하세요, ${userInfo.userId}님!`);
+      navigate("/");
+    } else {
+      alert(response.message);
+    }
+    setSubmitState("idle");
   };
+
+  const isValid = !(userInfo.userId !== "" && userInfo.userPw !== "");
 
   return (
     <Styled.SignUpContainer>
@@ -73,8 +135,12 @@ const SignIn = () => {
           <p>아이디</p>
           <input
             type="text"
-            name="userId"
-            onChange={handleInput}
+            // name="userId"
+            value={userInfo.userId}
+            onChange={(e) => {
+              const value = e.target.value;
+              dispatch({ type: "INPUT_ID", value });
+            }}
             placeholder="아이디를 입력해주세요"
           />
         </Styled.InputWrapper>
@@ -82,8 +148,12 @@ const SignIn = () => {
           <p>비밀번호</p>
           <input
             type={showPw ? "text" : "password"}
-            name="userPw"
-            onChange={handleInput}
+            // name="userPw"
+            value={userInfo.userPw}
+            onChange={(e) => {
+              const value = e.target.value;
+              dispatch({ type: "INPUT_PW", value });
+            }}
             placeholder="비밀번호를 입력해주세요"
           />
           <Styled.PwShowBtn onClick={toggleShowPw}>

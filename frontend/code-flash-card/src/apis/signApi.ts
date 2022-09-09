@@ -1,7 +1,8 @@
-import { UserInfoFromServer } from "types";
+import { TokenFromServer, UserInfoFromServer } from "types";
 
-const URL = `https://weareboard.kr/teosp/join`;
+const URL = `https://weareboard.kr/teosp`;
 
+// 회원가입 타입
 export type SignUpFormData = {
   username: string;
   password: string;
@@ -21,9 +22,58 @@ type FailedType = {
 
 type SignUpResult = SuccessType | FailedType;
 
+// 로그인 타입
+export type SignInFormData = {
+  username: string;
+  password: string;
+};
+
+type SignInSuccessType = {
+  result: "success";
+  data: TokenFromServer;
+};
+
+type SignInFailedType = {
+  result: "fail";
+  message: string;
+};
+
+type SignInResult = SignInSuccessType | SignInFailedType;
+
+const signInUser = async (formData: SignInFormData): Promise<SignInResult> => {
+  try {
+    const res = await fetch(`${URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = (await res.json()) as TokenFromServer;
+
+    if (res.ok) {
+      return {
+        result: "success",
+        data,
+      };
+    } else {
+      return {
+        result: "fail",
+        message: "로그인에 실패했습니다.",
+      };
+    }
+  } catch (e) {
+    return {
+      result: "fail",
+      message: "로그인 도중 문제가 발생했습니다.",
+    };
+  }
+};
+
 const signUpUser = async (formData: SignUpFormData): Promise<SignUpResult> => {
   try {
-    const res = await fetch(URL, {
+    const res = await fetch(`${URL}/join`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +104,7 @@ const signUpUser = async (formData: SignUpFormData): Promise<SignUpResult> => {
 const signApi = {
   URL: URL,
   create: signUpUser,
+  login: signInUser,
 };
 
 export default signApi;

@@ -15,3 +15,10 @@ export interface UserInfoFromServer {
   password: string;
   username: string;
 }
+
+export interface TokenFromServer {
+  accessToken: string;
+  accessTokenExpiresIn: "";
+  grantType: string;
+  refreshToken: string;
+}
