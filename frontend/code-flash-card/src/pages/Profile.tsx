@@ -1,12 +1,17 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import BackSpaceBtn from '../components/BackSpaceBtn';
+import React from "react";
+import styled from "@emotion/styled";
+import BackSpaceBtn from "../components/BackSpaceBtn";
 import images from "../assets/images";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  
-  //TODO 로그아웃 로직 구현 필요
-  const handleLogOut = () => {}
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    sessionStorage.clear();
+    alert("로그아웃이 완료되었습니다.");
+    navigate("/");
+  };
 
   return (
     <Styled.ProfileContainer>
@@ -21,7 +26,7 @@ const Profile = () => {
             <p>`username님!`</p>
           </Styled.DetailText>
           <ProfileImgWrapper>
-            <img src={images.icon_profile}/>
+            <img src={images.icon_profile} />
           </ProfileImgWrapper>
         </Styled.ProfileDetail>
       </Styled.ContentContainer>
@@ -29,17 +34,17 @@ const Profile = () => {
         <button onClick={handleLogOut}>로그아웃</button>
       </Styled.LogOutBtn>
     </Styled.ProfileContainer>
-  )
-}
+  );
+};
 
 const ProfileContainer = styled.div`
   background-color: #272727;
   height: 100vh;
-`
+`;
 
 const PageHeader = styled.div`
   padding: 12px 16px;
-`
+`;
 
 const ContentContainer = styled.div`
   margin: 8px 16px 0;
@@ -50,15 +55,14 @@ const ContentContainer = styled.div`
     color: #fcfcfc;
     margin-bottom: 32px;
   }
-`
+`;
 
 const ProfileDetail = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const DetailText = styled.div`
-  
   p {
     font-weight: 600;
     font-size: 16px;
@@ -69,18 +73,18 @@ const DetailText = styled.div`
       line-height: 24px;
     }
   }
-`
+`;
 
 const ProfileImgWrapper = styled.div`
   width: 48px;
   height: 48px;
   border: none;
   border-radius: 24px;
-  background-color: #A8A8A8;
+  background-color: #a8a8a8;
   align-items: center;
   display: flex;
   justify-content: center;
-`
+`;
 
 const LogOutBtn = styled.div`
   position: fixed;
@@ -98,8 +102,16 @@ const LogOutBtn = styled.div`
     text-decoration-line: underline;
     color: #525252;
   }
-`
+`;
 
-const Styled = {ProfileContainer, PageHeader, ContentContainer, ProfileDetail, DetailText, ProfileImgWrapper, LogOutBtn}
+const Styled = {
+  ProfileContainer,
+  PageHeader,
+  ContentContainer,
+  ProfileDetail,
+  DetailText,
+  ProfileImgWrapper,
+  LogOutBtn,
+};
 
 export default Profile;
