@@ -55,10 +55,8 @@ const isDisabledSubmitState = (state: UIState): state is DisableSubmitState =>
   calculateSummitState(state) === "disableSubmit";
 const isEnabledSubmitState = (state: UIState): state is EnableSubmitState =>
   calculateSummitState(state) === "enableSubmit";
-/**
- * newState는 action타입과 value로 새롭게 생성된 상태를 뜻함
- *
- */
+
+/** newState는 action타입과 value로 새롭게 생성된 상태를 뜻함 */
 const calculateByNewState = (newState: UIState): UIState => {
   if (isDisabledSubmitState(newState)) {
     return {
