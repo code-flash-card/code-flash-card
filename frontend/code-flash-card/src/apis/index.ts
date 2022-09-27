@@ -1,1 +1,0 @@
-export {default as cardApi} from './cardApi'

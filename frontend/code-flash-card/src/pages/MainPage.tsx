@@ -1,11 +1,12 @@
-import {useFetch} from "../hooks";
-import {Link} from "react-router-dom";
+import { useFetch } from "../hooks";
+import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import "../reset.css";
-import {textToColor} from "../utils";
+import { textToColor } from "../utils";
 import React from "react";
 import images from "../assets/images";
-import {cardApi} from "../apis";
+import cardApi from "../apis/cardApi";
+import API_URL from "../config";
 
 interface Banner {
   id: string;
@@ -16,7 +17,7 @@ type SimpleCard = {
   id: string;
   title: string;
   hashId: string;
-  hashName:string;
+  hashName: string;
   view: number;
 };
 
@@ -72,7 +73,10 @@ const calHashPropsList = (hashList: Hash[]) => {
   }));
 };
 
-const CardListGroupUI = ({ simpleCardList, hashList }: {
+const CardListGroupUI = ({
+  simpleCardList,
+  hashList,
+}: {
   simpleCardList: SimpleCard[];
   hashList: Hash[];
 }) => {
@@ -89,10 +93,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
           {calHashPropsList(hashList).map((hash) => (
             //TODO: hashtags 관련 페이지로 이동 구현
             <Link to={`/hashtags/${hash.name}`} key={hash.id}>
-              <Styled.HashtagItem
-                $backgroundColor={hash.color}
-                key={hash.id}
-              >
+              <Styled.HashtagItem $backgroundColor={hash.color} key={hash.id}>
                 #{hash.name}
               </Styled.HashtagItem>
             </Link>
@@ -100,9 +101,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
         </Styled.HashtagItemList>
       </ul>
       <ul>
-        <Styled.SectionLabel>
-          🔥 지금 HOT한 카드
-        </Styled.SectionLabel>
+        <Styled.SectionLabel>🔥 지금 HOT한 카드</Styled.SectionLabel>
         {popularList
           .map((p) => ({
             ...p,
@@ -120,7 +119,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
                     <span>#{popularCard.hashName}</span>
                   </li>
                   <li>
-                    <img src={images.icon_view}/>
+                    <img src={images.icon_view} />
                     <span>{popularCard.view}</span>
                   </li>
                 </InfoContainer>
@@ -147,7 +146,7 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
                     <span>#{simpleCard.hashName}</span>
                   </li>
                   <li>
-                    <img src={images.icon_view}/>
+                    <img src={images.icon_view} />
                     <span>{simpleCard.view}</span>
                   </li>
                 </InfoContainer>
@@ -156,7 +155,6 @@ const CardListGroupUI = ({ simpleCardList, hashList }: {
           ))}
       </ul>
     </>
-
   );
 };
 
@@ -198,35 +196,41 @@ const formatSimpleCardList = (data: CardFromServer[]): SimpleCard[] => {
     id: card.cardId.toString(),
     title: card.explain,
     hashId: card.hashtags[0].cardHashtagId.toString(),
-    hashName:card.hashtags[0].name,
+    hashName: card.hashtags[0].name,
     view: card.viewCount,
   }));
 };
 
 const formatSimpleHashList = (data: CardFromServer[]): Hash[] => {
-
-
-  const hashMap:Record<string, { cardList:CardFromServer []; id:number }> = {}
-  data.forEach(card=>{
-    card.hashtags.forEach((hash)=>{
-      if(hashMap?.[hash.name]){
-        hashMap[hash.name].cardList.push(card)
-      }else{
-        hashMap[hash.name] = {cardList:[card],id:hash.cardHashtagId}
+  const hashMap: Record<string, { cardList: CardFromServer[]; id: number }> =
+    {};
+  data.forEach((card) => {
+    card.hashtags.forEach((hash) => {
+      if (hashMap?.[hash.name]) {
+        hashMap[hash.name].cardList.push(card);
+      } else {
+        hashMap[hash.name] = { cardList: [card], id: hash.cardHashtagId };
       }
-    })
-  })
+    });
+  });
 
-  return Object.entries(hashMap).map(([hashName,item])=>({id:item.id.toString(),name:hashName}))
+  return Object.entries(hashMap).map(([hashName, item]) => ({
+    id: item.id.toString(),
+    name: hashName,
+  }));
 };
 
 const CardListGroup = () => {
-  const {data: cardListFromServer, error} = useFetch<CardFromServer[]>(
-    cardApi.URL
+  const { data: cardListFromServer, error } = useFetch<CardFromServer[]>(
+    API_URL.card
   );
 
   if (!cardListFromServer) {
-    return <div style={{display:'flex',justifyContent:'center'}}>Loading...</div>;
+    return (
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        Loading...
+      </div>
+    );
   }
   if (error) {
     return <div>!!!!error</div>;
@@ -240,54 +244,48 @@ const CardListGroup = () => {
       hashList={simpleHashList}
     ></CardListGroupUI>
   );
-
-}
+};
 
 const MainPage = () => {
-
   const isUserLogin = sessionStorage.length > 0 || localStorage.length > 0;
 
   return (
     <Styled.IndexSection>
       <Styled.MainHeader>
         <Link to="/">
-          <img src={images.logo_flip}/>
+          <img src={images.logo_flip} />
         </Link>
         <div>
-          {isUserLogin ? 
-             (
-              <Styled.ProfileContainer>
-                  <Link to="/profile">
-                    <img src={images.icon_profile}/>
-                  </Link>
-                </Styled.ProfileContainer>
-              ) : (
-                <Styled.SignInContainer>
-                  <Link to="/signin">
-                    <p>시작하기</p>
-                  </Link>
-                </Styled.SignInContainer>
-              )
-          }
+          {isUserLogin ? (
+            <Styled.ProfileContainer>
+              <Link to="/profile">
+                <img src={images.icon_profile} />
+              </Link>
+            </Styled.ProfileContainer>
+          ) : (
+            <Styled.SignInContainer>
+              <Link to="/signin">
+                <p>시작하기</p>
+              </Link>
+            </Styled.SignInContainer>
+          )}
         </div>
       </Styled.MainHeader>
       <Styled.ContentContainer>
         <a href="https://github.com/code-flash-card/code-flash-card">
           <Styled.BannerContainer>
-            <img src={images.banner}/>
+            <img src={images.banner} />
           </Styled.BannerContainer>
         </a>
-        <CardListGroup/>
+        <CardListGroup />
         <Styled.CreateCardButton type="button">
           <Link to="/makecard">
-            <img src={images.icon_create}/>
+            <img src={images.icon_create} />
           </Link>
         </Styled.CreateCardButton>
       </Styled.ContentContainer>
     </Styled.IndexSection>
-
-  )
-
+  );
 };
 
 const IndexSection = styled.div`
@@ -313,15 +311,15 @@ const MainHeader = styled.div`
 const ProfileContainer = styled.div`
   width: 24px;
   height: 24px;
-`
+`;
 
 const SignInContainer = styled.div`
   p {
-    color: #3680FF;
+    color: #3680ff;
     font-size: 16px;
     font-weight: 600;
   }
-`
+`;
 
 const ContentContainer = styled.div`
   margin: 0 16px;
@@ -430,7 +428,7 @@ const Styled = {
   MainHeader,
   ContentContainer,
   ProfileContainer,
-  SignInContainer
+  SignInContainer,
 };
 
 export default MainPage;

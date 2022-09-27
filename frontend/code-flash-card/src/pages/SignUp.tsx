@@ -43,7 +43,7 @@ const calcSignUpForm = (state: EnableSignUp): SignUpFormData => {
   return {
     username: state.userId,
     password: state.userPw,
-    encryptPassword: state.userPw,
+    encryptPassword: state.checkPw,
     loginType: "FLASHCARD",
   };
 };

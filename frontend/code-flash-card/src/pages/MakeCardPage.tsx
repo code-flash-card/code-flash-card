@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SimpleCloseBtn from "../components/SimpleCloseBtn";
 import { AskingStopMakingCardModal } from "../components/AskingStopMakingCardModal";
 import "../reset.css";
-import { cardApi } from "../apis";
+import cardApi from "../apis/cardApi";
 import { MakeCardFormData } from "../apis/cardApi";
 
 interface EnableSubmitState {
